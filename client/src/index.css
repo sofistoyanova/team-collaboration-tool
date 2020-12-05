@@ -1,0 +1,34 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.navbar_link {
+  margin: 0 10px;
+}
+
+.button {
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 20px;
+  display: block;
+  width: fit-content;
+}
+
+.close_btn {
+  margin: 10px;
+  padding: 5px;
+  font-weight: bold;
+  font-size: 1rem;
+  background: red;
+}
+
+.email_item {
+  margin: 20px 0;
+  display: flex;
+}
