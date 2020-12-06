@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 const { getMethod, postMethod } = require('../helpers/request')
+const { NavLink } = require('react-router-dom')
 
 const Organization = () => {
     const [ statusMessage, setStatusMessage ] = useState('')
     const url = window.location.search
     const organizationId = new URLSearchParams(url).get('id')
+    const waitlistPath = '/waitlist?organizationId=' + organizationId
 
     const handleFormSubmit = async (event) => {
         event.preventDefault()
@@ -26,7 +28,7 @@ const Organization = () => {
     return (
         <div>
             <h1>Organization page</h1>
-
+            <NavLink to={waitlistPath}>waiting requests</NavLink>
             <div>
                 <p>{statusMessage}</p>
                 <form onSubmit={handleFormSubmit}>

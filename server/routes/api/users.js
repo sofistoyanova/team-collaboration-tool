@@ -143,6 +143,9 @@ router.get('/logout', (req, res) => {
 
 
 // get notifications
+
+//change to notifications
+// find all notification models associated with the user
 router.get('/invitations', async (req, res) => {
     try {
         const sessionUserId = req.session.user._id
@@ -161,6 +164,7 @@ router.get('/invitations', async (req, res) => {
     }
 })
 
+// accept or decline invitatio
 router.post('/invitations', async (req, res) => {
     try {
         const { organizationId, action } = req.body
@@ -188,12 +192,12 @@ router.get('/my-organizations', async (req, res) => {
         const user = await User.findById(sessionUserId)
         const activeOrganizationsId = user.activeOrganizations
         const organizations = []
-
+        
         await Promise.all(activeOrganizationsId.map(async organizationId => {
             const organization = await Organization.findById(organizationId)
             organizations.push(organization)
         }))
-    
+        console.log(organizations)
         res.send({ status: 200, message: organizations })
     } catch(err) {
         res.send({status: 500, message: 'server error'})

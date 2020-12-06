@@ -18,6 +18,7 @@ mongoose
 
 require('./models/User')
 require('./models/Organization')
+require('./models/Notification')
 
 app.use(express.json())
 app.use((req, res, next) => {

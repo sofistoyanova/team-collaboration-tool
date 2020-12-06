@@ -8,6 +8,7 @@ const { invitationEmailTemplate } = require('../../helpers/email-templates')
 const router = express.Router()
 const Organization = mongoose.model('Organization')
 const User = mongoose.model('User')
+const Notification = mongoose.model('Notification')
 
 let transporter = nodemailer.createTransport({
     service: 'Gmail',
@@ -16,6 +17,137 @@ let transporter = nodemailer.createTransport({
         secure: false,
         user: gmailEmail,
         pass: gmailPassword
+    }
+})
+
+
+// delete organization route
+router.delete('/', async (req, res) => {
+    
+})
+
+router.post('/request-respond', async (req, res) => {
+    const { action, userId, organizationId } = req.body
+    // find admin 
+    const adminId = req.session.user._id
+
+    try {
+        const admin = await User.findById(adminId)
+        const organization = await Organization.findById(organizationId)
+    
+        // allow only admin to do the actions
+        if(organization.admin != adminId) {
+            console.log(organization.admin, adminId)
+            return res.send({status: 401, message: 'Unauthotized'})
+        }
+        // find user
+        const user = await User.findById(userId)
+
+        // delete from sentInvitationsToOrganizations
+        let userSentInvitations = user.sentInvitationsToOrganizations
+        userSentInvitations = userSentInvitations.filter(id => {
+            return id != organizationId
+        })
+
+        user.sentInvitationsToOrganizations = userSentInvitations
+
+        // delete notification for user
+        await Notification.deleteOne({type: 'request', for: 'organization', user: userId, organization: organizationId})
+
+        // if action is accept - add to active organizations and delete notification
+        // create new notification for the user
+        if(action === 'accept') {
+            if(!user.activeOrganizations.includes(organizationId)) {
+                user.activeOrganizations.push(organizationId)
+            }
+            
+            // create new acceptance notification for user
+            const findExistingNotification = await Notification.findOne({
+                type: 'response',
+                for: 'user',
+                user: userId,
+                organization: organizationId
+            })
+            
+            if(!findExistingNotification) {
+                const userNotification = await Notification({
+                    type: 'response',
+                    for: 'user',
+                    user: userId,
+                    organization: organizationId
+                })
+    
+                userNotification.save()
+            }
+
+        }
+    
+        await user.save()
+        return res.send({status: 200, message: 'Success'})
+    } catch(err) {
+        console.log(err)
+        res.send({status: 500, message: 'server error'})
+    }
+})
+
+router.post('/join', async (req, res) => {
+    console.log('h', req.body)
+    const sessionUserId = req.session.user._id
+    try {
+        const user = await User.findById(sessionUserId)
+        const organizationName = req.body.organizationName.toLowerCase()
+
+        // find organization
+        const organization = await Organization.findOne({name: organizationName})
+        let alreadyMember = false
+        let alreadyInvitationSent = false
+
+        if(organization) {
+            const organizationId = organization._id
+
+            await Promise.all(user.activeOrganizations.map(async activeOrganizationId => {
+                if(JSON.stringify(activeOrganizationId) === JSON.stringify(organizationId)) {
+                    return alreadyMember = true
+                }
+            }))
+
+            await Promise.all(user.sentInvitationsToOrganizations.map(async sentInvitationsToOrganizationId => {
+                if(JSON.stringify(sentInvitationsToOrganizationId) === JSON.stringify(organizationId)) {
+                    return alreadyInvitationSent = true
+                }
+            }))
+
+            await Promise.all(user.receivedInvitationsToOrganizations.map(async receivedInvitationsToOrganizationId => {
+                if(JSON.stringify(receivedInvitationsToOrganizationId) === JSON.stringify(organizationId)) {
+                    return alreadyInvitationSent = true
+                }
+            }))
+        } else {
+            return res.send({status: 400, message: 'organization not found'})
+        }
+
+
+        if(alreadyMember || alreadyInvitationSent) {
+            return res.send({status: 400, message: 'already a member or previous invitation was sent'})
+        }
+
+        // update user sentInvitationsToOrganizations
+        await user.sentInvitationsToOrganizations.push(organization.id)
+        await user.save()
+
+        const notification = await Notification({
+            type: 'request',
+            for: 'organization',
+            user: sessionUserId,
+            organization: organization.id
+        })
+        
+        // create notification for organization
+        await notification.save()
+        return res.send({status: 400, message: 'invitation was sent'})
+    } catch(err) {
+        console.log(err)
+        res.send({status: 500, message: 'server error'})
     }
 })
 
@@ -28,7 +160,7 @@ router.post('/invite', async (req, res) => {
         receivedInvitations.push(receivedInvitations._id)
         await user.save()
 
-        // check if user not found what happend
+        // check if user not found what happens - do not sace anything
 
         // check if organization is already in receivedInvitations or active invitations
         // if yes do not send again
@@ -41,10 +173,11 @@ router.post('/invite', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-    const { name, emails } = req.body
+    let { name, emails } = req.body
     const sessionUserId = req.session.user._id
-
+    
     if(!name) {
+        name = name.toLowerCase()
         return res.send({
             status: 400,
             message: 'please provide a name'

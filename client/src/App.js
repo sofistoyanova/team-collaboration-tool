@@ -9,6 +9,7 @@ import JoinOrganization from './pages/JoinOrganization'
 import CreateOrganization from './pages/CreateOrganization'
 import Notifications from './pages/Notifications'
 import Organization from './pages/Organization'
+import OrganizationWaitlist from './pages/OrganizationWaitlist'
 
 function App() {
   const userId = localStorage.getItem('userId')
@@ -48,6 +49,10 @@ function App() {
 
         <ProtectedRoute path="/organization">
           <Organization />
+        </ProtectedRoute>
+
+        <ProtectedRoute path="/waitlist">
+          <OrganizationWaitlist />
         </ProtectedRoute>
 
       </Switch>

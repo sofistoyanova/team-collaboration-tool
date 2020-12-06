@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Button from '../components/Button'
 const { getMethod } = require('../helpers/request')
-const { NavLink } = require("react-router-dom")
+const { NavLink } = require('react-router-dom')
 
 const Home = (props) => {
     const { userId } = props
@@ -12,7 +12,7 @@ const Home = (props) => {
         const getOrganizationsRequest = await getMethod('/api/users/my-organizations')
         const requestData = getOrganizationsRequest.data
         const requestStatus = requestData.status
-        console.log(requestData)
+
         if(requestStatus != 200) {
             return setErrorMessage('something happened, please try again later')
         }
@@ -33,6 +33,7 @@ const Home = (props) => {
                 {
                     invitations.length > 0 ?
                     invitations.map(organization => {
+                        console.log(organization, invitations)
                         const organizationName = organization.name
                         const organizationId= organization._id
                         const organizationAdmin = organization.admin
