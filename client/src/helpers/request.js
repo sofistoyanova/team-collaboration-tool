@@ -23,3 +23,12 @@ export const postMethod = async (formData, route) => {
     return err
   }
 }
+
+export const deleteMethod = async (route) => {
+  try {
+    const res = await axios.delete(route);
+    return res;
+  } catch (err) {
+    return err;
+  }
+}

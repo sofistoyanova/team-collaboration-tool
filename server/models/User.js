@@ -32,10 +32,12 @@ const userSchema = new Schema({
         type: String,
         default: 'default.png'
     },
-    activeOrganizations: {
-        type: Array,
-        required: false
-    },
+    activeOrganizations: [
+        {
+            type: ObjectID,
+            ref: 'Organization'
+        }
+    ],
     receivedInvitationsToOrganizations: [
         {
             type: ObjectID,

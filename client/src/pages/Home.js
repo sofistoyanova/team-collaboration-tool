@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Button from '../components/Button'
-const { getMethod } = require('../helpers/request')
+const { getMethod, deleteMethod } = require('../helpers/request')
 const { NavLink } = require('react-router-dom')
 
 const Home = (props) => {
@@ -20,8 +20,15 @@ const Home = (props) => {
         setInvitations(requestData.message)
     }, [])
 
-    const deleteOrganization = (organizationId) => {
-        console.log(organizationId)
+    const deleteOrganization = async (organizationId) => {
+        const deleteOrganizationRequest = await deleteMethod(`/api/organizations/?id=${organizationId}`)
+        console.log(deleteOrganizationRequest.data)
+        if(deleteOrganizationRequest.data.status == 200) {
+            document.getElementById('organization_' + organizationId).remove()
+            setErrorMessage(deleteOrganizationRequest.data.message)
+        } else {
+            setErrorMessage(deleteOrganizationRequest.data.message)
+        }
     }
 
     return (
@@ -41,7 +48,7 @@ const Home = (props) => {
                         const organizationPath = '/organization?id=' + organizationId
 
                         return (
-                            <div id={'invitation_' + organizationId}>
+                            <div id={'organization_' + organizationId}>
                                 <NavLink to={organizationPath}>{organizationName} , role: {userRole}</NavLink>
                                 { userRole == 'admin' ? <button onClick={() => deleteOrganization(organizationId)}>delete</button> : '' }
                             </div>

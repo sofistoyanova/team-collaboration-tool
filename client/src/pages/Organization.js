@@ -8,6 +8,7 @@ const Organization = () => {
     const url = window.location.search
     const organizationId = new URLSearchParams(url).get('id')
     const waitlistPath = '/waitlist?organizationId=' + organizationId
+    const membersPath = '/members?organizationId=' + organizationId
 
     const handleFormSubmit = async (event) => {
         event.preventDefault()
@@ -29,6 +30,7 @@ const Organization = () => {
         <div>
             <h1>Organization page</h1>
             <NavLink to={waitlistPath}>waiting requests</NavLink>
+            <NavLink to={membersPath}>Members</NavLink>
             <div>
                 <p>{statusMessage}</p>
                 <form onSubmit={handleFormSubmit}>

@@ -20,10 +20,57 @@ let transporter = nodemailer.createTransport({
     }
 })
 
+router.delete('/member', async (req, res) => {
+    const { organizationId, memberId } = req.query
+
+    try {
+        await User.updateMany({activeOrganizations: organizationId, _id: memberId}, {$pull: {activeOrganizations: organizationId}})
+        return res.send({status: 200, message: 'Success'})
+    } catch(err) {
+        res.send({status: 500, message: 'server error'})
+    }
+})
+
+router.get('/members', async (req, res) => {
+    try {
+        const { organizationId } = req.query
+
+        // find user
+        const users = await User.find({activeOrganizations: organizationId})
+        
+        if(users.length > 0) {
+            return res.send({status: 200, message: users})
+        }
+
+        return res.send({status: 404, message: 'no members'})
+        // 
+    } catch(err) {
+        res.send({status: 500, message: 'server error'})
+    }
+})
 
 // delete organization route
 router.delete('/', async (req, res) => {
-    
+    const organizationId = req.query.id
+
+    try {
+        const organization = await Organization.findById(organizationId)
+        const sessionUserId = req.session.user._id
+        
+        if(organization.admin != sessionUserId) {
+            return res.send({status: 401, message: 'Unauthotized'})
+        }
+        
+        const query = {}
+        //const users = await User.findM({activeOrganizations: organizationId})
+        await User.updateMany({activeOrganizations: organizationId}, {$pull: {activeOrganizations: organizationId}})
+
+        //console.log('u', users)
+        await Organization.findByIdAndDelete(organizationId)
+        return res.send({status: 200, message: 'Success'})
+    } catch(err) {
+        res.send({status: 500, message: 'server error'})
+    }
 })
 
 router.post('/request-respond', async (req, res) => {
@@ -57,8 +104,8 @@ router.post('/request-respond', async (req, res) => {
         // if action is accept - add to active organizations and delete notification
         // create new notification for the user
         if(action === 'accept') {
-            if(!user.activeOrganizations.includes(organizationId)) {
-                user.activeOrganizations.push(organizationId)
+            if(!user.activeOrganizations.includes(organization._id)) {
+                user.activeOrganizations.push(organization._id)
             }
             
             // create new acceptance notification for user
