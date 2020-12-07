@@ -26,7 +26,7 @@ const OrganizationWaitlist = () => {
             document.getElementById(userId).remove()
         }
     }
-
+  
     return (
         <div>
             <h1>Waitlist</h1>
