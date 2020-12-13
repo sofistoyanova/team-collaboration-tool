@@ -70,10 +70,6 @@ const Signup = () => {
                     <label>Upload profile picture</label>
                     <input
                         name="profileImage"
-                        onChange={(event) => {
-                            const file = event.target.files[0];
-                            setFile(file);
-                        }} 
                         type="file" 
                     />
                 </div>

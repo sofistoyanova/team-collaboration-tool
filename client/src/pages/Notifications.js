@@ -31,9 +31,8 @@ const Notifications = () => {
         if(sendAnswerRequestStatus == 200) {
             document.querySelector(`#invitation_${organizationId}`).remove()
         }
-        console.log(sendAnswerRequest)
     }
-
+    console.log(invitations)
     return (
         <div>
             <h1>Your Notifications:</h1>
@@ -53,7 +52,7 @@ const Notifications = () => {
                             </div>
                         )
                     })
-                    : ''
+                    : 'no invitations'
                 }
             </div>
         </div>

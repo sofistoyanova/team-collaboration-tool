@@ -18,9 +18,9 @@ const storage = multer.diskStorage({
     filename: function(req, file, cb) {
         console.log(file.mimetype)
         const isImage = file.mimetype.includes('image')
-        if(isImage) {
-            cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
-        }
+        // if(isImage) {
+        //     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+        // }
         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
     }
 })
@@ -155,9 +155,11 @@ router.get('/invitations', async (req, res) => {
     
         await Promise.all(receivedInvitationsToOrganizations.map(async organizationId => {
             organization = await Organization.findById(organizationId)
-            organizations.push(organization)
+            if(organization) {
+                organizations.push(organization)
+            }
         }))
-        
+        console.log('all', organizations)
         res.send({ status: 200, message: organizations })
     } catch(err) {
         res.send({ status: 500, message: 'Server error pls try again later!' })

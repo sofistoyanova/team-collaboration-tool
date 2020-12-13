@@ -20,6 +20,23 @@ let transporter = nodemailer.createTransport({
     }
 })
 
+router.get('/assignees', async (req, res) => {
+    try {
+        const { organizationId } = req.query
+        console.log('id', organizationId)
+        const users = await User.find({activeOrganizations: organizationId})
+        console.log('assignes', typeof users)
+        if(!users) {
+            return res.send({status: 404, message: []})
+        }
+    
+        return res.send({status: 200, message: users})
+    } catch(err) {
+        console.log(err)
+        res.send({status: 500, message: 'server error'})
+    }
+})
+
 router.delete('/member', async (req, res) => {
     const { organizationId, memberId } = req.query
 
@@ -204,7 +221,7 @@ router.post('/invite', async (req, res) => {
     try {
         const user = await User.findOne({ email })
         const receivedInvitations = user.receivedInvitationsToOrganizations
-        receivedInvitations.push(receivedInvitations._id)
+        receivedInvitations.push(req.query.id)
         await user.save()
 
         // check if user not found what happens - do not sace anything
@@ -213,6 +230,21 @@ router.post('/invite', async (req, res) => {
         // if yes do not send again
         
         return res.send({status: 200, message: 'invitation sent'})
+    } catch(err) {
+        console.log(err)
+        return res.send({status: 500, message: 'server error'})
+    }
+})
+
+router.get('/', async (req, res) => {
+    try {
+        const { id } = req.query
+        const organization = await Organization.findById(id)
+
+        if(organization) {
+            return res.send({status: 200, message: organization.name})
+        }
+        return res.send({status: 404, message: 'Does not exists'})
     } catch(err) {
         console.log(err)
         return res.send({status: 500, message: 'server error'})
