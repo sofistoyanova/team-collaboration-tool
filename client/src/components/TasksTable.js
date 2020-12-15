@@ -66,33 +66,6 @@ const TasksTable = (props) => {
 
     }
 
-    // var myArray = [{
-    //     name: "Joe Blow",
-    //     date: "Mon Oct 31 2016 00:00:00 GMT-0700 (PDT)",
-    //     flag: false
-    //   }, {
-    //     name: "Sam Snead",
-    //     date: "Sun Oct 30 2016 00:00:00 GMT-0700 (PDT)",
-    //     flag: true
-    //   }, {
-    //     name: "John Smith",
-    //     date: "Sat Oct 29 2016 00:00:00 GMT-0700 (PDT)",
-    //     flag: false
-    //   }];
-      
-    //   myArray.sort(function compare(a, b) {
-    //     var dateA = new Date(a.flag);
-    //     var dateB = new Date(b.flag);
-
-    //     if(!b.flag) {
-    //         return -1
-    //     } else {
-    //         return 1
-    //     }
-    //   });
-      
-      //console.log('myarray', myArray);
-
     return (
         <div className="tasks_table">
             <div className="tasksTable_colum">
