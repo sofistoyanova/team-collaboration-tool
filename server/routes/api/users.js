@@ -38,6 +38,22 @@ const upload = multer({
     }
 })
 
+router.get('/user', async (req, res) => {
+    const userId = req.query.id
+    //console.log('id', userId)
+    try {
+        const user = await User.findById(userId)
+        if(!user) {
+            return res.send({status: 404, message: 'User not found'})
+        }
+
+        return res.send({status: 200, message: user})
+    } catch(err) {
+        //console.log(err)
+        res.send({status: 500, message: 'server error'})
+    }
+})
+
 router.post('/signup', upload.single('profileImage'), async (req, res) => {
     console.log(1, req.body, req.file)
     const fileName = req.file ? req.file.filename : 'default.png'

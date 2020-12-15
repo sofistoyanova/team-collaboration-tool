@@ -39,6 +39,40 @@ const upload = multer({
         }
     }
 })
+
+router.patch('/', async (req, res) => {
+    const {taskId, organizationId} = req.query
+    const updates = Object.keys(req.body)
+    const allowedUpdates = ['title', 'description', 'status']
+
+    const isValidOperation = updates.every((update) => {
+        return allowedUpdates.includes(update)
+    })
+
+    if(!isValidOperation) {
+        return res.status(400).send({status: 400, message: 'invalid updates'})
+    }
+
+    try{
+        const task = await Task.findById(taskId)
+
+        updates.forEach((update) => {
+            task[update] = req.body[update]
+        })
+
+        await task.save()
+        
+       
+        if(!task) {
+            return res.send({status: 404, message: 'task not found'})
+        }
+
+        const allTasks = await Task.find({ organization: organizationId })
+        return res.send({status: 200, message: allTasks})
+    }catch(e) {
+        res.status(400).send(e)
+    }
+})
  
 router.post('/', upload.single('media'), async (req, res) => {
     const formData = req.body
@@ -69,7 +103,7 @@ router.post('/', upload.single('media'), async (req, res) => {
             urgent: isUrgent,
             media: fileName,
             organization: organizationId,
-            status: 'unfinished'
+            status: 'in-progress'
         })
 
         await task.save()

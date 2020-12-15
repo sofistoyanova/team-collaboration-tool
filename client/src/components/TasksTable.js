@@ -17,15 +17,15 @@ const TasksTable = (props) => {
             const { title, description, status, urgent, deadline, createdAt, media } = task
             const assigneeId = task.assignee
             const creatorId = task. creator
-            const taskComponent = <Task title={title} description={description} status={status} urgent={urgent} deadline={deadline} createdAt={createdAt} media={media} assigneeId={assigneeId} creatorId={creatorId} />
+            const taskComponent = <Task setTasks={(tasks) => props.setTasks(tasks)} title={title} description={description} status={status} urgent={urgent} deadline={deadline} createdAt={createdAt} media={media} assigneeId={assigneeId} creatorId={creatorId} />
 
-            if(status === 'unfinished') {
+            if(status === 'in-progress') {
                 unFinishedTasksArr.push(task)
 
                 // check last element date
                 // compare last element deadline with current task deadline
                 // if current task deadline is closer to current date move in front
-            } else if(status === 'underReview') {
+            } else if(status === 'in-review') {
                 underReviewTasksArr.push(task)
             } else if(status === 'finished') {
                 finishedTasksArr.push(task)
@@ -103,8 +103,9 @@ const TasksTable = (props) => {
                         const { title, description, status, urgent, deadline, createdAt, media } = task
                         const assigneeId = task.assignee
                         const creatorId = task. creator
+                        const taskId = task._id
 
-                        return <Task title={title} description={description} status={status} urgent={urgent} deadline={deadline} createdAt={createdAt} media={media} assigneeId={assigneeId} creatorId={creatorId} />
+                        return <Task column='in-progress' id={taskId} updateTasks={(tasks) => props.updateTasks(tasks)} title={title} description={description} status={status} urgent={urgent} deadline={deadline} createdAt={createdAt} media={media} assigneeId={assigneeId} creatorId={creatorId} />
                     })}
                 </div>
             </div>
@@ -116,8 +117,9 @@ const TasksTable = (props) => {
                         const { title, description, status, urgent, deadline, createdAt, media } = task
                         const assigneeId = task.assignee
                         const creatorId = task. creator
+                        const taskId = task._id
                         
-                        return <Task title={title} description={description} status={status} urgent={urgent} deadline={deadline} createdAt={createdAt} media={media} assigneeId={assigneeId} creatorId={creatorId} />
+                        return <Task column='in-review' id={taskId} updateTasks={(tasks) => props.updateTasks(tasks)} title={title} description={description} status={status} urgent={urgent} deadline={deadline} createdAt={createdAt} media={media} assigneeId={assigneeId} creatorId={creatorId} />
                     })}
                 </div>
             </div>
@@ -129,8 +131,9 @@ const TasksTable = (props) => {
                         const { title, description, status, urgent, deadline, createdAt, media } = task
                         const assigneeId = task.assignee
                         const creatorId = task. creator
+                        const taskId = task._id
                         
-                        return <Task title={title} description={description} status={status} urgent={urgent} deadline={deadline} createdAt={createdAt} media={media} assigneeId={assigneeId} creatorId={creatorId} />
+                        return <Task id={taskId} updateTasks={(tasks) => props.updateTasks(tasks)} title={title} description={description} status={status} urgent={urgent} deadline={deadline} createdAt={createdAt} media={media} assigneeId={assigneeId} creatorId={creatorId} />
                     })}
                 </div>
             </div>

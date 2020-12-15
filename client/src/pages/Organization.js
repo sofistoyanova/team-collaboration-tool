@@ -30,7 +30,12 @@ const Organization = () => {
         }
     }
 
+    const updateTasks = (tasks) => {
+        setTasks(tasks)
+    }
+
     useEffect(async () => {
+        console.log('tasks updated')
         try {
             console.log('set name')
             const request = await getMethod(`/api/organizations/?id=${organizationId}`)
@@ -76,7 +81,7 @@ const Organization = () => {
 
                 <button onClick={showTaskCreateForm}>Create task</button>
                     {console.log('task table take', tasks)}
-                <TasksTable tasks={tasks} />
+                <TasksTable updateTasks={(tasks) => updateTasks(tasks)} tasks={tasks} />
                 <TaskForm organizationId={organizationId} setTasks={(tasks) => setTasks(tasks)} />
             </div>
         </div>

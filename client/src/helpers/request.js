@@ -32,3 +32,12 @@ export const deleteMethod = async (route) => {
     return err;
   }
 }
+
+export const patchMethod = async (route, formData) => {
+  try {
+    const res = await axios.patch(route, formData);
+    return res;
+  } catch (err) {
+    return err;
+  }
+};
