@@ -10,6 +10,7 @@ const Task = (props) => {
     const [creatorName, setCreator] = useState('')
     const [title, setTitle] = useState(props.title)
     const [description, setDescription] = useState(props.description)
+    const [media, setMedia] = useState(props.media)
     const [isUrgent, setIsUrgent] = useState(props.urgent)
     const [status, setStatus] = useState(props.status)
     const [taskId, setTaskId] = useState(props.id)
@@ -99,39 +100,57 @@ const Task = (props) => {
                 
                 <div className="taskContainer_content">
                     <span onClick={hideTask} className="btn-close">X</span>
-                    <h4>{title}</h4>
-                    <p>{description}</p>
-                    
-                    <div>
-                        <div>
-                            <span>Creator: </span>
-                            <span>{creatorName}</span>
-                        </div>
+                    <h2>{title}</h2>
 
-                        <div>
-                            <span>Assigned: </span>
-                            <span>{assignedUserName}</span>
-                        </div>
+                    <div className="taskContainer_row">
+                        <span>Description: </span>
+                        <p>{description}</p>
                     </div>
 
-                    <form onChange={changeStaus}>
-                        <label>Change status</label>
+                    {media ? 
+                        <div className="assets_container">
+                            <span>Assets:</span>
+                            <div className="assets">
+                                <img src={require('../uploads/' + media).default} />
+                            </div>
+                        </div>
+                        :
+                            ''
+                    }
+
+                    <div className="taskContainer_row">
+                        <span>Status: </span>
+                        <p>{isUrgent ? 'Urgent': 'Normal'}</p>
+                    </div>
+
+                    <form className="changeStatus_form taskContainer_row" onChange={changeStaus}>
+                        <span>Change status</span>
                         <select value={status}>
                             <option value="in-progress">in progress</option>
                             <option value="in-review">in review</option>
                             <option value="finished">finished</option>
                         </select>
                     </form>
+                    
+                    <div className="taskContainer_row">
+                        <span>Creator: </span>
+                        <span>{creatorName}</span>
+                    </div>
 
-                    {props.userId == props.creatorId ? 
-                            <button onClick={deleteTask}>delete task</button>
-                        :
-                        ''
-                    }
+                    <div className="taskContainer_row">
+                        <span>Assigned: </span>
+                        <span>{assignedUserName}</span>
+                    </div>
 
                     <div>
                         <Comments taskId={taskId} />
                     </div>
+
+                    {props.userId == props.creatorId ? 
+                            <button className="deleteTask_button" onClick={deleteTask}>delete task</button>
+                        :
+                        ''
+                    }
                 </div>
             </div>
         </div>

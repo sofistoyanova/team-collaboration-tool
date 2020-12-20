@@ -78,8 +78,6 @@ a.button:hover {
   z-index: 2;
   left: 0;
   top: 0;
-  width: 100vw;
-  height: 100vh;
   background-color: rgba(0,0,0,0.4);
   right: 0;
   bottom: 0;
@@ -94,13 +92,17 @@ a.button:hover {
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 50px;
+  max-height: 60vh;
+  width: auto;
+  overflow: scroll;
+}
+
+.taskContainer_content {
+  border-radius: 1%;
 }
 
 .taskForm_container input {
   border: 1px solid #000;
-}
-
-.task-urgent {
 }
  
 .btn-close {
@@ -452,6 +454,7 @@ input {
   margin-right: 20px;
   max-width: 40px;
   height: auto;
+  border-radius: 50%;
 }
 
 .table_row {
@@ -460,6 +463,7 @@ input {
 
 .tableRow_content {
   display: flex;
+  cursor: pointer;
 }
 
 .table_row h4 {
@@ -480,5 +484,157 @@ input {
 }
 
 .taskPopup_container {
-  
+  border-radius: 1%;
+}
+
+.taskPopup_container h2 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.taskForm_row {
+  margin: 30px 0;
+}
+
+.taskForm_row label {
+  width: 150px;
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.taskPopup_container .button {
+  margin: 30px auto;
+}
+
+.taskFormRow_select label {
+  display: block;
+}
+
+.taskForm_row select {
+  min-width: 260px;
+}
+
+select {
+  padding: 8px;
+  border: 1px solid #000;
+}
+
+.taskContainer_content h2 {
+  text-align: center;
+}
+
+.taskForm_container input,
+.taskForm_container select,
+.taskForm_container textarea {
+  width: 320px;
+  box-sizing: border-box;
+}
+
+.taskContainer_row {
+  display: flex;
+  margin: 20px 0;
+}
+
+.taskContainer_row p {
+  margin: 0;
+}
+
+.taskContainer_row span {
+  margin-right: 20px;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.comments_container {
+  margin: 60px 0;
+}
+
+.comments_container h3 {
+  text-align: center;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+}
+
+textarea {
+  border: 1px solid #000;
+  padding: 8px;
+}
+
+.deleteTask_button {
+  padding: 8px;
+  background: #dc2f02;
+  border: 1px solid #dc2f02;
+  border-radius: 0;
+  color: #fff;
+  display: block;
+  margin: 50px auto 0;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.deleteComment_button {
+  padding: 4px 8px;
+  background: #dc2f02;
+  border: 1px solid #dc2f02;
+  border-radius: 0;
+  color: #fff;
+  display: block;
+  margin: 10px 0;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.comment_button {
+  width: fit-content;
+  min-width: auto;
+  padding: 8px 20px;
+  background: #006d77;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 1px solid #006d77;
+}
+
+.comment_container {
+  border: 1px solid #000;
+  border-radius: 1%;
+  margin: 20px 0;
+  padding: 10px 20px;
+}
+
+.assets img {
+  max-width: 200px;
+  height: auto;
+}
+
+.assets_container span {
+  margin-right: 20px;
+  margin-bottom: 10px;
+  font-weight: 600;
+  font-size: 18px;
+  display: block;
+}
+
+.waitlist_title {
+  text-align: center;
+}
+
+.waitlist_button {
+  background: transparent;
+  border: 1px solid #000;
+  margin: 0 10px;
+  padding: 8px 15px;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.waitlist_button:hover {
+  background: #000;
+  color: #fff;
+}
+
+.waitlist_row {
+  margin: 20px 0;
+  display: flex;
 }

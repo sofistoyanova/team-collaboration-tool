@@ -49,17 +49,17 @@ const TaskForm = (props) => {
                 <h2>Create form</h2>
                 <p>{errorMsg}</p>
                 <form onSubmit={handleFormSubmit} method="POST" encType="multipart/form-data">
-                    <div>
+                    <div className="taskForm_row">
                         <label>Title:</label>
                         <input required type="text" name="title" placeholder="title" />
                     </div>
 
-                    <div>
+                    <div className="taskForm_row">
                         <label>Description:</label>
-                        <input required name="description" placeholder="Description.." type="textarea" />
+                        <textarea required name="description" placeholder="Description.." rows="4" cols="50" type="textarea"></textarea>
                     </div>
 
-                    <div>
+                    <div className="taskForm_row">
                         <label>Assign:</label>
                         <select required name="assignee">
                             {assignees.map(assignee => {
@@ -73,26 +73,25 @@ const TaskForm = (props) => {
                         </select>
                     </div>
 
-                    <div>
+                    <div className="taskForm_row">
                         <label>Attach image</label>
                         <input name="media" type="file" />
                     </div>
 
-                    <div>
+                    <div className="taskForm_row">
                         <label>Deadline</label>
-                        <input name="deadline" type="date"></input>
+                        <input required name="deadline" type="date"></input>
                     </div>
 
-                    <div>
+                    <div className="taskForm_row">
                         <label>Does it prevent user from purchasing products?</label>
                         <select name="urgent">
                             <option value="no">no</option>
                             <option value="yes">yes</option>
-                            <option value="other">other</option>
                         </select>
                     </div>
 
-                    <input type="submit" />
+                    <input className="button" type="submit" />
                 </form>
             </div>
         </div>

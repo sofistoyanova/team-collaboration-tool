@@ -8,8 +8,8 @@ const commentSchema = new Schema({
         required: true
     },
     author: {
-        type: ObjectID,
-        red: 'User'
+        type: String,
+        required: true
     }
 })
 

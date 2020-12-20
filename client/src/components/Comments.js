@@ -52,19 +52,18 @@ const Comments = (props) => {
     }
 
     return (
-        <div>
-            <h6>Comments</h6>
-            <CommentForm taskId={props.taskId} updateComments={(comments) => setComments(comments)} />
+        <div className="comments_container">
+            <h3>Comments</h3>
+            <CommentForm taskId={props.taskId} updateComments={(comments) => setComments(comments)} removeErrorMsg={() => setErrorMsg('')} />
 
             <div>
                 <p>{errorMsg}</p>
 
                 {comments.map(comment => 
-                    <div>
-                        x
+                    <div className="comment_container">
                         <p>{comment.text}</p>
                         <p>by: {comment.author}</p>
-                        <button onClick={() => deleteComment(comment._id)}>delete comment</button>
+                        <button className="deleteComment_button" onClick={() => deleteComment(comment._id)}>delete comment</button>
                     </div>
                 )}
             </div>

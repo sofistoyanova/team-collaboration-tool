@@ -17,6 +17,7 @@ const CommentForm = (props) => {
             //props.setComments(requestResponse)
             //setTasks(requestResponse)
             props.updateComments(requestResponse)
+            props.removeErrorMsg()
             form.reset()
         } else {
             setErrorMsg('Please try again later')
@@ -26,7 +27,7 @@ const CommentForm = (props) => {
     return (
         <form id="comment_form" onSubmit={handleFormSubmit}>
             <input type="textarea" name="comment" placeholder="Type your comment" />
-            <input type="submit" value="comment" />
+            <input className="comment_button" type="submit" value="comment" />
         </form>
     )
 }

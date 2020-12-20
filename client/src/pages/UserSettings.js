@@ -24,28 +24,31 @@ const UserSettings = (props) => {
         }
     }
     return (
-        <div>
-            <h1>Change profile</h1>
-            <div>
-                <h2>Change password</h2>
-                <form id="changePassword_form" onSubmit={changePassword}>
-                    <p>{statusMessage}</p>
-                    <div>
-                        <label>Old password</label>
-                        <input required type="password" name="oldPassword" />
-                    </div>
-                    <div>
-                        <label>New password</label>
-                        <input required type="password" name="newPassword" />
-                    </div>
-                    <div>
-                        <label>Confrim new password</label>
-                        <input required type="password" name="confirmNewPassword" />
-                    </div>
+        <div className="organizationForm_container">
 
-                    <input type="submit" value="change" />
-                </form>
-            </div>
+        <div className="container_header">
+        <h1>Change password</h1>
+        <p className="errorStatus_message">{statusMessage}</p>
+        </div>
+
+        <div>
+            <form id="changePassword_form" onSubmit={changePassword}>
+                <div className="createOrganizationForm_row">
+                    <label>Old password</label>
+                    <input required type="password" name="oldPassword" />
+                </div>
+                <div className="createOrganizationForm_row">
+                    <label>New password</label>
+                    <input required type="password" name="newPassword" />
+                </div>
+                <div className="createOrganizationForm_row">
+                    <label>Confrim new password</label>
+                    <input required type="password" name="confirmNewPassword" />
+                </div>
+
+                <input type="submit" value="change" />
+            </form>
+        </div>
         </div>
     )
 }

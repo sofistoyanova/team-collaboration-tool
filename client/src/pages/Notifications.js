@@ -34,10 +34,11 @@ const Notifications = () => {
     }
     console.log(invitations)
     return (
-        <div>
-            <h1>Your Notifications:</h1>
-            <p>{ errorMessage }</p>
-            <div id="invitations">
+        <div className="container">
+            <h1 className="waitlist_title">Your Notifications:</h1>
+            <p className="waitlist_title">{ errorMessage }</p>
+            <div className="membersList_container" id="invitations">
+                <p>Accept or decline: </p>
                 {
                     invitations.length > 0 ?
                     invitations.map(organization => {
@@ -45,10 +46,10 @@ const Notifications = () => {
                         const organizationId= organization._id
 
                         return (
-                            <div id={'invitation_' + organizationId}>
+                            <div className="waitlist_row" id={'invitation_' + organizationId}>
                                 <p>{organizationName}</p>
-                                <button onClick={(event) => {sendAnswer(event, organizationId, 'accept')}}>accept</button>
-                                <button onClick={(event) => {sendAnswer(event, organizationId, 'decline')}}>decline</button>
+                                <button className="waitlist_button"  onClick={(event) => {sendAnswer(event, organizationId, 'accept')}}>accept</button>
+                                <button className="waitlist_button"  onClick={(event) => {sendAnswer(event, organizationId, 'decline')}}>decline</button>
                             </div>
                         )
                     })

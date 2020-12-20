@@ -56,11 +56,13 @@ const upload = multer({
 router.patch('/comments', async (req, res) => {
     const { taskId } = req.query
     const { comment } = req.body
-    const author = req.session.user._id
+    const authorId = req.session.user._id
 
     try {
         const task = await Task.findById(taskId)
-        task.comments.push({text: comment, author: author})
+        const author = await User.findById(authorId)
+        console.log(author)
+        task.comments.push({text: comment, author: author.email})
 
         await task.save()
         return res.send({status: 200, message: task.comments})

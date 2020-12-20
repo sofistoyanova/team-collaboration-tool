@@ -28,28 +28,31 @@ const OrganizationWaitlist = () => {
     }
   
     return (
-        <div>
-            <h1>Waitlist</h1>
+        <div className="waitlist_container container">
+            <h1 className="waitlist_title">Waitlist</h1>
 
-            {
-                requests.length > 0 ?
-                requests.map(request => {
-                    const { user } = request
-                    const userId = user._id
-                    const { firstName, lastName, email } = user
-                    console.log(4, request)
+            <div className="membersList_container">
+                <p>Users waiting for answers:</p>
+                {
+                    requests.length > 0 ?
+                    requests.map(request => {
+                        const { user } = request
+                        const userId = user._id
+                        const { firstName, lastName, email } = user
+                        console.log(4, request)
 
-                    return (
-                        <div id={userId}>
-                            <span>{firstName} {lastName} - {email}</span>
-                            <button onClick={() => { respondToRequest('accept', userId) }}>accept</button>
-                            <button onClick={() => { respondToRequest('reject', userId) }}>reject</button>
-                            
-                        </div>
-                    )
-                })
-                : ''
-            }
+                        return (
+                            <div className="waitlist_row" id={userId}>
+                                <span>{firstName} {lastName} - {email}</span>
+                                <button className="waitlist_button" onClick={() => { respondToRequest('accept', userId) }}>accept</button>
+                                <button className="waitlist_button" onClick={() => { respondToRequest('reject', userId) }}>reject</button>
+                                
+                            </div>
+                        )
+                    })
+                    : ''
+                }
+            </div>
         </div>
     )
 }
