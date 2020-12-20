@@ -78,7 +78,7 @@ const TasksTable = (props) => {
                         const creatorId = task. creator
                         const taskId = task._id
 
-                        return <Task column='in-progress' id={taskId} updateTasks={(tasks) => props.updateTasks(tasks)} title={title} description={description} status={status} urgent={urgent} deadline={deadline} createdAt={createdAt} media={media} assigneeId={assigneeId} creatorId={creatorId} />
+                        return <Task userId={props.userId} column='in-progress' id={taskId} updateTasks={(tasks) => props.updateTasks(tasks)} title={title} description={description} status={status} urgent={urgent} deadline={deadline} createdAt={createdAt} media={media} assigneeId={assigneeId} creatorId={creatorId} />
                     })}
                 </div>
             </div>
@@ -92,7 +92,7 @@ const TasksTable = (props) => {
                         const creatorId = task. creator
                         const taskId = task._id
                         
-                        return <Task column='in-review' id={taskId} updateTasks={(tasks) => props.updateTasks(tasks)} title={title} description={description} status={status} urgent={urgent} deadline={deadline} createdAt={createdAt} media={media} assigneeId={assigneeId} creatorId={creatorId} />
+                        return <Task userId={props.userId} column='in-review' id={taskId} updateTasks={(tasks) => props.updateTasks(tasks)} title={title} description={description} status={status} urgent={urgent} deadline={deadline} createdAt={createdAt} media={media} assigneeId={assigneeId} creatorId={creatorId} />
                     })}
                 </div>
             </div>
@@ -106,7 +106,7 @@ const TasksTable = (props) => {
                         const creatorId = task. creator
                         const taskId = task._id
                         
-                        return <Task id={taskId} updateTasks={(tasks) => props.updateTasks(tasks)} title={title} description={description} status={status} urgent={urgent} deadline={deadline} createdAt={createdAt} media={media} assigneeId={assigneeId} creatorId={creatorId} />
+                        return <Task userId={props.userId} id={taskId} updateTasks={(tasks) => props.updateTasks(tasks)} title={title} description={description} status={status} urgent={urgent} deadline={deadline} createdAt={createdAt} media={media} assigneeId={assigneeId} creatorId={creatorId} />
                     })}
                 </div>
             </div>

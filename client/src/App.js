@@ -11,10 +11,25 @@ import Notifications from './pages/Notifications'
 import Organization from './pages/Organization'
 import OrganizationWaitlist from './pages/OrganizationWaitlist'
 import Members from './pages/Members'
+import UserSettings from './pages/UserSettings'
+import ResetPassword from './pages/ResetPassword'
+import RequestPassword from './pages/RequestPassword'
+import { useEffect, useState } from 'react'
+import { getMethod } from './helpers/request'
 
 function App() {
-  const userId = localStorage.getItem('userId')
-  console.log(userId)
+  //const userId = localStorage.getItem('userId')
+  const [ userId, setUserId ] = useState(localStorage.getItem('userId'))
+
+  useEffect(async () => {
+    const user = await getMethod('/api/users/current-user')
+    const userId = user.data._id
+
+    if(userId) {
+      localStorage.setItem('userId', userId)
+      setUserId(userId)
+    }
+  })
   return (
     <Router>
       <Navbar userId={userId} />
@@ -26,6 +41,14 @@ function App() {
 
         <Route path="/login">
           <Login />
+        </Route>
+
+        <Route path="/request-new-password">
+          <RequestPassword />
+        </Route>
+
+        <Route path="/forgot-password">
+          <ResetPassword userId={userId} />
         </Route>
 
         <Route path="/logout">
@@ -49,7 +72,7 @@ function App() {
         </ProtectedRoute>
 
         <ProtectedRoute path="/organization">
-          <Organization />
+          <Organization userId={userId} />
         </ProtectedRoute>
 
         <ProtectedRoute path="/waitlist">
@@ -58,6 +81,10 @@ function App() {
 
         <ProtectedRoute path="/members">
           <Members userId={userId} />
+        </ProtectedRoute>
+        
+        <ProtectedRoute path="/user-settings">
+          <UserSettings userId={userId} />
         </ProtectedRoute>
 
       </Switch>

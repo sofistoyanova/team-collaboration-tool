@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react'
-const { getMethod, patchMethod } = require('../helpers/request')
+import Comments from './Comments'
+const { getMethod, patchMethod, deleteMethod } = require('../helpers/request')
 
 
 const Task = (props) => {
     const [assignedUserName, setAssignedUser] = useState('')
+    const [assignedUserImage, setAssignedUserImage] = useState('')
+
     const [creatorName, setCreator] = useState('')
     const [title, setTitle] = useState(props.title)
     const [description, setDescription] = useState(props.description)
@@ -21,7 +24,6 @@ const Task = (props) => {
 
         const assigneeId = props.assigneeId
         const creatorId = props.creatorId
-        console.log('props', props)
 
         const getAssignedUser = await getMethod('/api/users/user?id=' + assigneeId)
         const getCreator = await getMethod('/api/users/user?id=' + creatorId)
@@ -29,6 +31,7 @@ const Task = (props) => {
         const creator = getCreator.data
 
         if(assignedUser.status == 200) {
+            setAssignedUserImage(assignedUser.message.profileImage)
             setAssignedUser(assignedUser.message.firstName + ' ' + assignedUser.message.lastName)
         }
 
@@ -40,8 +43,7 @@ const Task = (props) => {
     const showTicket = (event) => {
         const parentNode = event.target.closest('.taskMain_container')
         const taskContainer = parentNode.querySelector('.task_container')
-        //console.log(taskContainer)
-        // close all
+
         Array.from(document.querySelectorAll('.task_container')).map(container => {
             container.classList.add('hide')
         })
@@ -62,25 +64,34 @@ const Task = (props) => {
         if(updateTaskRequest.status != 200) {
             return setErrorMessage(updateTaskRequest.message)
         }
-        console.log('updatin', updateTaskRequest)
+
         const updatedTasks = updateTaskRequest.message
         if(updatedTasks.length > 0) {
-            console.log('updatin status')
             return props.updateTasks(updatedTasks)
         }
-        // update organization component
-        //props.setTasks()
-        // get answer
-        // update state statu
+
         setStatus(statusValue)
         const newStatus = event.target.value
     }
 
+    const deleteTask = async () => {
+        const deleteTaskRequest = await deleteMethod(`/api/tasks/?taskId=${taskId}&organizationId=${organizationId}`)
+
+        if(deleteTaskRequest.data.status == 200) {
+            return props.updateTasks(deleteTaskRequest.data.message)
+        }
+
+        return setErrorMessage(deleteTaskRequest.data.message)
+    }
+
     return (
         <div className="taskMain_container">
-            <div onClick={showTicket} className={isUrgent ? 'task-urgent' : ''}>
-                <p>{errorMessage}</p>
-                <h4>{title}</h4>
+            <div onClick={showTicket} className={isUrgent ? 'task-urgent table_row' : 'table_row'}>
+                <div className="tableRow_content">
+                    <img className="user_image" src={assignedUserImage ? require(`../uploads/${assignedUserImage}`).default : require(`../uploads/default.png`).default} />
+                    <h4>{title ? title : errorMessage}</h4>
+                </div>
+                {isUrgent ? <span className="urgent_task">urgent</span> : ''}
             </div>
             <div className="task_container hide">
 
@@ -111,6 +122,16 @@ const Task = (props) => {
                             <option value="finished">finished</option>
                         </select>
                     </form>
+
+                    {props.userId == props.creatorId ? 
+                            <button onClick={deleteTask}>delete task</button>
+                        :
+                        ''
+                    }
+
+                    <div>
+                        <Comments taskId={taskId} />
+                    </div>
                 </div>
             </div>
         </div>

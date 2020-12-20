@@ -3,13 +3,26 @@ const mongoose = require('mongoose')
 const multer = require('multer')
 const path = require('path')
 const webPush = require('web-push')
+const nodemailer = require('nodemailer')
 const keys = require('../../config/keys')
+const { gmailEmail, gmailPassword } = keys
+const { taskAlertTemplate } = require('../../helpers/email-templates')
 
 const router = express.Router()
 const Organization = mongoose.model('Organization')
 const User = mongoose.model('User')
 const Notification = mongoose.model('Notification')
 const Task = mongoose.model('Task')
+
+let transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+        port: 587,
+        secure: false,
+        user: gmailEmail,
+        pass: gmailPassword
+    }
+})
 
 
 // Set Storage Engine for multer
@@ -37,6 +50,77 @@ const upload = multer({
         } else {
           cb(null, false)
         }
+    }
+})
+
+router.patch('/comments', async (req, res) => {
+    const { taskId } = req.query
+    const { comment } = req.body
+    const author = req.session.user._id
+
+    try {
+        const task = await Task.findById(taskId)
+        task.comments.push({text: comment, author: author})
+
+        await task.save()
+        return res.send({status: 200, message: task.comments})
+    } catch(err) {
+        console.log(err)
+        res.status(400).send('server error')
+    }
+})
+
+router.get('/comments', async (req, res) => {
+    const { taskId } = req.query
+
+    try {
+        const task = await Task.findById(taskId)
+        if(!task) {
+            return res.send({status: 200, message: 'task do not exists'})
+        }
+        if(task.comments.length < 1) {
+            return res.send({status: 404, message: 'No comments yet'})
+        }
+        return res.send({status: 200, message: task.comments})
+    } catch(err) {
+        console.log(err)
+        res.status(400).send('server error')
+    }
+})
+
+router.delete('/comments', async (req, res) => {
+    const { commentId, taskId } = req.query
+    console.log(commentId, taskId)
+    try {
+        const task = await Task.findById(taskId)
+        const filteredComments = task.comments.filter(comment => comment._id != commentId)
+        task.comments = filteredComments
+        
+        await task.save()
+        return res.send({status: 200, message: task.comments})
+    } catch(err) {
+        console.log(err)
+        res.status(400).send('server error')
+    }
+})
+
+router.delete('/', async (req, res) => {
+    const { taskId, organizationId } = req.query
+    const sessionUserId = req.session.user._id
+
+    try {
+        const task = await Task.findById(taskId)
+
+        if(task.creator != sessionUserId) {
+            return res.send({status: 401, message: 'Unauthotized'})
+        }
+
+        await Task.findByIdAndDelete(taskId)
+        const allTasks = await Task.find({ organization: organizationId })
+        return res.send({status: 200, message: allTasks})
+    } catch(err) {
+        console.log(err)
+        res.status(400).send('server error')
     }
 })
 
@@ -92,6 +176,7 @@ router.post('/', upload.single('media'), async (req, res) => {
 
         const assignedUser = await User.findOne({ email })
         //console.log(assignedUser, email, assignedUser._id)
+        const organization = await Organization.findById(organizationId)
 
         const task = await Task({
             title,
@@ -107,6 +192,16 @@ router.post('/', upload.single('media'), async (req, res) => {
         })
 
         await task.save()
+
+        if(isUrgent) {
+            // send email
+            const taskAlertEmail = taskAlertTemplate(email, organization.name, title)
+            transporter.sendMail(taskAlertEmail, (err, info) => {
+                if(err) {
+                    console.log(err)
+                }
+            })
+        }
 
         const allTasks = await Task.find({ organization: organizationId })
         //console.log(allTasks)

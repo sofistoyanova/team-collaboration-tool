@@ -5,10 +5,28 @@ const validator = require("validator")
 const keys = require('../../config/keys')
 const multer = require('multer')
 const path = require('path')
+const { use } = require('./tasks')
+const jwt = require('jsonwebtoken')
+const nodemailer = require('nodemailer')
+const { resetPasswordTemplate } = require('../../helpers/email-templates')
+const passport = require('passport')
+
+const { gmailEmail, gmailPassword } = keys
 
 const router = express.Router()
 const User = mongoose.model('User')
 const Organization = mongoose.model('Organization')
+const ForgottenPassword = mongoose.model('ForgottenPassword')
+
+let transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+        port: 587,
+        secure: false,
+        user: gmailEmail,
+        pass: gmailPassword
+    }
+})
 
 // Set Storage Engine for multer
 const storage = multer.diskStorage({
@@ -25,6 +43,14 @@ const storage = multer.diskStorage({
     }
 })
 
+router.get('/auth/google', passport.authenticate('google', {
+    scope: ['profile', 'email']
+}))
+
+router.get('/auth/google/callback', passport.authenticate('google'), (req, res) => {
+    req.session.user = req.user
+    res.redirect('http://localhost:3000/')
+})
 
 // Sign up route
 const upload = multer({
@@ -35,6 +61,128 @@ const upload = multer({
         } else {
           cb(null, false)
         }
+    }
+})
+
+router.patch('/reset-password', async (req, res) => {
+    const { email, token } = req.query
+    const { newPassword, confirmNewPassword } = req.body
+
+    // Password validation
+    if(!newPassword || !confirmNewPassword) {
+        return res.send({status: 400, message: 'fillin password and confirm the password'})
+    } else if (newPassword.length < 7) {
+        return res.send({status: 400, message: 'Password must be at least 7 characters'})
+    } else if (newPassword !== confirmNewPassword) {
+        return res.send({status: 400, message: 'Password did not match'})
+    }
+
+    try {
+        const forgottenPasswordRecord = await ForgottenPassword.find({email, token})
+        if(!forgottenPasswordRecord) {
+            return res.send({status: 400, message: 'Please request a new password'})
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, keys.saltedRounds)
+        const user = await User.findOne({ email })
+        if(!user) {
+            return res.send({status: 400, message: 'user not found'})
+        }
+
+        user.password = hashedPassword
+
+        await user.save()
+        return res.send({status: 200, message: 'Changed! Go to login!'})
+    } catch (err) {
+        console.log(err)
+        return res.send({status: 500, message: 'server error'})
+    }
+})
+
+router.post('/forgot-password', async (req, res) => {
+    const { email } = req.body
+    if(!email) {
+        return res.send({status: 400, message: 'Please enter an email'})
+    }
+
+    try {
+        const user = await User.findOne({email})
+        if(!user) {
+            return res.send({status: 404, message: 'Email does not exists in the system'})
+        }
+
+        const token = jwt.sign({email}, 'forgottenpassword')
+        const url = `localhost:3000/forgot-password?email=${email}&token=${token}`
+        const previousForgottenPasswordRecord = await ForgottenPassword.findOne({email: email})
+        console.log('console.', email, token)
+
+        if(previousForgottenPasswordRecord) {
+            await ForgottenPassword.findByIdAndDelete(previousForgottenPasswordRecord._id)
+        }
+        const newForgottenPasswordRecord = await ForgottenPassword({
+            email,
+            token
+        })
+
+        await newForgottenPasswordRecord.save()
+
+        //send email
+        const emailTemplate = resetPasswordTemplate(email, url)
+        transporter.sendMail(emailTemplate, (err, info) => {
+            if(!err) {
+                return res.send({status: 200, message: 'check your email'})
+            } else { 
+                console.log(err)
+                return res.send({status: 500, message: 'there was an error please try again later'})
+            }
+        })
+
+    } catch(err) {
+        console.log(err)
+        return res.send({status: 500, message: 'server error'})
+    }
+})
+
+router.patch('/', async (req, res) => {
+    console.log('here', req.body)
+    const userId = req.query.id
+    const { oldPassword, newPassword, confirmNewPassword } = req.body
+
+    if(!oldPassword || !newPassword || !confirmNewPassword) {
+        return res.send({status: 400, message: 'All fields are required'})   
+    }
+
+    if(newPassword != confirmNewPassword) {
+        return res.send({status: 400, message: 'Passwords do not match'})
+    }
+
+    if(newPassword.length < 7) {
+        return res.send({status: 400, message: 'Pasword should be at least 7 char'})
+    }
+
+    try {
+        // check old password
+        const user = await User.findById(userId)
+        const userPassword = user.password
+        const doPasswordsMatch = await bcrypt.compare(oldPassword, userPassword)
+        const doOldAndNewPasswordsMatch = await bcrypt.compare(newPassword, userPassword)
+        console.log('oldand new', doOldAndNewPasswordsMatch)
+        if(!doPasswordsMatch) {
+            return res.send({status: 400, message: 'Old password do not match'})
+        }
+
+        if(doOldAndNewPasswordsMatch) {
+            return res.send({status: 400, message: 'new password cannot be the same as old'})
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, keys.saltedRounds)
+        user.password = hashedPassword
+        await user.save()
+
+        return res.send({status: 200, message: 'Successfully updated'})
+    } catch(err) {
+        console.log(err)
+        return res.send({status: 500, message: 'server error'})
     }
 })
 

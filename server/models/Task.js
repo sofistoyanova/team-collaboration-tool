@@ -2,6 +2,17 @@ const { ObjectID } = require('mongodb')
 const mongoose = require('mongoose')
 const { Schema } = mongoose
 
+const commentSchema = new Schema({
+    text: {
+        type: String,
+        required: true
+    },
+    author: {
+        type: ObjectID,
+        red: 'User'
+    }
+})
+
 const TaskSchema = new Schema({
     title: {
         type: String,
@@ -46,7 +57,8 @@ const TaskSchema = new Schema({
     status: { // three types: - unfinished, duringReview, finished
         type: String,
         required: true
-    }
+    },
+    comments: [commentSchema]
 })
 
 // Compile Schema into a model

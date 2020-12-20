@@ -31,12 +31,23 @@ const Home = (props) => {
         }
     }
 
+    const displayJoinOrganizationForm = (event) => {
+        event.preventDefault()
+        document.querySelector('#joinOrganization_form').classList.toggle('hide')
+    }
+
     return (
-        <div>
-            <h1>Home page</h1>
-            <div>
-                <h1>MY ORGANIZATIONS:</h1>
-                <p>{ errorMessage }</p>
+        <div className="container">
+            <div className="homePage_header">
+                <h1>ORGANIZATIONS</h1>
+                <Button nodeClass="join_button" link='/join-organization' text='+ Join organization' />
+
+                {/* <a className="button join_button" href="/join-organization">+ Join organization</a> */}
+
+            </div>
+            <p>{ errorMessage }</p>
+
+            <div className="allOrganizations_container">
                 {
                     invitations.length > 0 ?
                     invitations.map(organization => {
@@ -48,18 +59,22 @@ const Home = (props) => {
                         const organizationPath = '/organization?id=' + organizationId
 
                         return (
-                            <div id={'organization_' + organizationId}>
-                                <NavLink to={organizationPath}>{organizationName} , role: {userRole}</NavLink>
-                                { userRole == 'admin' ? <button onClick={() => deleteOrganization(organizationId)}>delete</button> : '' }
+                            <div className="organization_container" id={'organization_' + organizationId}>
+                                <NavLink to={organizationPath}>
+                                    <h3>{organizationName}</h3>
+                                    <p>Your role is - <span className="user_role">{userRole}</span></p>
+                                    { userRole == 'admin' ? <button className="button deleteOrganization_button" onClick={() => deleteOrganization(organizationId)}>delete</button> : '' }
+                                </NavLink>
+                                {/* <NavLink to={organizationPath}>{organizationName} , role: {userRole}</NavLink> */}
+                                {/* { userRole == 'admin' ? <button onClick={() => deleteOrganization(organizationId)}>delete</button> : '' } */}
                             </div>
                         )
                     })
                     : ''
                 }
             </div>
-            <Button link='/join-organization' text='Join organization' />
             <br />
-            <Button link='/create-organization' text='Create organization' />
+            <Button nodeClass="createOrganization_button" link='/create-organization' text='+ Create organization' />
         </div>
     )
 }

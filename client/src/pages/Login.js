@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { userLoginValidation } from '../helpers/formValidation'
 import { postMethod } from '../helpers/request'
 import { useHistory } from "react-router-dom";
+import backgrounImage from '../assets/signup-background.jpg'
+const { NavLink } = require("react-router-dom")
 
 const Login = () => {
     const [ loginErrorMsg, setLoginErrorMsg ] = useState('')
@@ -47,21 +49,29 @@ const Login = () => {
     }
 
     return (
-        <div>
-            <p>{loginErrorMsg}</p>
-            <form onSubmit={handleFormSubmit}>
-                <div>
-                    <label>Email</label>
-                    <input type="email" name="email" placeholder="a@a.com"  />
-                </div>
+        <div className="signupFormOuter_container">
+            <img className="background_image" src={backgrounImage} />
+            
+            <div className="signupForm_container">
+                <h1>LOGIN</h1>
+                <a href="/api/users/auth/google" className="">Use Google Account Instead?</a>
 
-                <div>
-                    <label>Password </label>
-                    <input type="password" value="1234567" name="password" />
-                </div>
+                <form className="login_form" onSubmit={handleFormSubmit}>
+                    <div className="form_row">
+                        <label>Email:</label>
+                        <input type="email" name="email" placeholder="a@a.com"  />
+                    </div>
 
-                <input type="submit" />
-            </form>
+                    <div className="form_row">
+                        <label>Password: </label>
+                        <input type="password" value="1234567" name="password" />
+                    </div>
+                    
+                    <p className="errorStatus_message">{loginErrorMsg}</p>  
+                    <button className="form_row form_button" type="submit">submit</button>
+                </form>
+                <NavLink to="/request-new-password">Forgot password? Clikc here!</NavLink>
+                </div>
         </div>
     )
 }

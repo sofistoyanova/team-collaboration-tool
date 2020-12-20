@@ -5,6 +5,7 @@ const { getMethod, postMethod, deleteMethod } = require('../helpers/request')
 const Members = (props) => {       
     const { userId } = props 
     const [ statusMessage, setStatusMessage ] = useState('')
+    const [ organizationAdmin, setOrganizationAdmin ] = useState('')
     const [ members, setMembers ] = useState([])
     const url = window.location.search
     const organizationId = new URLSearchParams(url).get('organizationId')
@@ -18,6 +19,10 @@ const Members = (props) => {
             setMembers(getMembersRequest.message)
         } else {
             setStatusMessage(getMembersRequest.message)
+        }
+
+        if(!organizationAdmin) {
+            setOrganizationAdmin(new URLSearchParams(url).get('adminId'))
         }
     }, [])
 
@@ -34,21 +39,30 @@ const Members = (props) => {
     }
 
     return (
-        <div>
-            <h1>Members</h1>
-            <p>{statusMessage}</p>
+        <div className="container members_container">
+            <h1>Members List:</h1>
+            <div className="membersList_container">
+                <p>{statusMessage}</p>
 
-            <div>
-                {
-                    members.map(member => {
-                        const { firstName, lastName, email } = member
-                        const memberId = member._id
+                <div>
+                    {
+                        members.map(member => {
+                            const { firstName, lastName, email } = member
+                            const memberId = member._id
 
-                        return (
-                        <p id={'member_' + memberId} >{firstName} {lastName} - {email} {memberId == userId ? '(ADMIN)' : <button onClick={() => removeMember(memberId) }>remove</button>}</p>
-                        )
-                    })
-                }
+                            return (
+                                <div>
+                                    <p id={'member_' + memberId} >{firstName} {lastName} - {email} {memberId == organizationAdmin ? '(ADMIN)' : ''}</p>
+                                    {userId == organizationAdmin && memberId != organizationAdmin ? 
+                                        <button onClick={() => removeMember(memberId) }>remove</button>
+                                    : 
+                                        ''    
+                                    }
+                                </div>
+                            )
+                        })
+                    }
+                </div>
             </div>
         </div>
     )

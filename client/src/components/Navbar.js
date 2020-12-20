@@ -7,9 +7,11 @@ const Navbar = (props) => {
         <div>
             {props.userId ?
                         <ul className="navbar">
-                            <NavLink className="navbar_link" to="/logout">LOGOUT</NavLink>
+                            <a className="logo" href="/">WEEKLY PLANNER</a>
                             <NavLink className="navbar_link" exact to="/">HOME</NavLink>
                             <NavLink className="navbar_link" to="/notifications">Notifications</NavLink>
+                            <NavLink className="navbar_link" to="/user-settings">Settings</NavLink>
+                            <NavLink className="navbar_link" to="/logout">LOGOUT</NavLink>
                         </ul>
                         :
                         <ul className="navbar">   

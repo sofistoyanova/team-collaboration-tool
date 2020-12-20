@@ -47,9 +47,11 @@ const CreateOrganization = () => {
     }
 
     return(
-        <div>
-            <h1>create organization</h1>
-            <p>{ statusMessage }</p>
+        <div className="organizationForm_container">
+            <div className="container_header">
+                <h1>Create organization</h1>
+                <p className="errorStatus_message">{statusMessage}</p>
+            </div>
             {
                 emails.map(email => {
                     return <div className="email_item">
@@ -59,14 +61,18 @@ const CreateOrganization = () => {
                 })
             }
             <form onSubmit={handleFormSubmit}>
-                <label> organization name: </label>
-                <input type="text" name="name" placeholder="organization name" />
-                <div>
-                    <div id="showEmails"></div>
-                    <input id="email" name="email address" type="email" />
-                    <button onClick={addEmail}>invite person</button>
+                <div className="createOrganizationForm_row">
+                    <label> organization name: </label>
+                    <input type="text" name="name" placeholder="organization name" />
                 </div>
-                <input type="submit" value="create organization" />
+                <div id="showEmails"></div>
+
+                <div className="createOrganizationForm_row">
+                    <label>Invite people: </label>
+                    <input id="email" name="email address" placeholder="Type your email..." type="email" />
+                    <button className="addPerson_button" onClick={addEmail}>+ add</button>
+                </div>
+                <input className="button organizationForm_button" type="submit" value="create organization" />
             </form>
         </div>
     )

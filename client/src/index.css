@@ -5,6 +5,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
+  padding: 0;
+  background: #FFDDD2;
 }
 
 .navbar_link {
@@ -12,12 +15,27 @@ body {
 }
 
 .button {
-  background: #000;
+  background: #006D77;
   color: #fff;
   text-decoration: none;
-  padding: 10px 20px;
+  padding: 12px 20px;
   display: block;
   width: fit-content;
+  font-size: 18px;
+  text-transform: uppercase;
+  border: 1px solid #006D77;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: #fff;
+  color: #006D77;
+  cursor: pointer;
+}
+
+a.button:hover {
+  text-decoration: none;
 }
 
 .close_btn {
@@ -83,14 +101,384 @@ body {
 }
 
 .task-urgent {
-  background: red;
 }
  
 .btn-close {
   position: absolute;
   top: 0%;
   right: 0%;
-  padding: 5px;
-  background: red;
+  padding: 7px 12px;
+  background: #e29578;
   cursor: pointer;
+  border-bottom-left-radius: 18px;
+  border-bottom-right-radius: 6px;
+  font-size: 25px;
+  font-weight: 600;
+}
+
+.navbar {
+  text-align: right;
+  padding: 30px 70px;
+  margin: 0;
+  height: 80px;
+  box-sizing: border-box;
+  background: #006D77;
+  position: relative;
+}
+
+.navbar a {
+  margin: 0 15px;
+  font-size: 20px;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #fff;
+}
+
+.navbar a:hover {
+  text-decoration: underline;
+}
+
+a {
+  text-decoration: none;
+  color: #000
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.container {
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 50px 50px 100px;
+}
+
+.signupFormOuter_container {
+  position: relative;
+  height: calc(100vh - 80px);
+  overflow: hidden;
+}
+
+.signupForm_container {
+  width: fit-content;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  padding: 50px;
+  border-radius: 2%;
+  min-width: 400px;
+}
+
+.signupForm_container a {
+  text-align: center;
+  display: block;
+}
+
+.signupForm_container h1 {
+  text-align: center;
+}
+
+.background_image {
+  display: inline-block;
+  width: 100%;
+}
+
+.form_row {
+  margin: 25px auto;
+  display: flex;
+  align-items: flex-end;
+  width: fit-content;
+}
+
+.form_row label {
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.login_form .form_row label {
+  width: 80px;
+}
+
+.signup_form .form_row label {
+  width: 150px;
+}
+
+.form_row input {
+  min-width: 240px;
+  padding: 8px;
+  border: 1px solid #000;
+  border-radius: 2%;
+}
+
+.form_button {
+  cursor: pointer;
+  font-size: 14px;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  min-width: 140px;
+  text-align: center;
+  border-radius: 1%;
+  border: 1px solid #006D77;
+  background: #006D77;
+  padding: 12px 50px;
+  margin: 20px auto 25px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.errorStatus_message {
+  color: red;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  margin: 10px;
+}
+
+.homePage_header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 50px;
+}
+
+.join_button {
+  margin: 0 50px;
+  position: absolute;
+  right: 0;
+  cursor: pointer;
+}
+
+.createOrganization_button {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  cursor: pointer;
+}
+
+.allOrganizations_container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.organization_container {
+  padding: 30px;
+  border: 2px solid #000;
+  border-radius: 4%; 
+  width: 300px;
+  background: #EDF6F9;
+}
+
+.user_role {
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.deleteOrganization_button {
+  margin-top: 30px;
+  cursor: pointer;
+}
+
+.organization_container a:hover {
+  text-decoration: none;
+}
+
+.organizationForm_container {
+  padding: 50px 50px 100px;
+  margin: 100px auto;
+  background: #EDF6F9;
+  max-width: 400px;
+  border-radius: 2%;
+  border: 1px solid #006D77;
+}
+
+.organizationForm_container h1 {
+  text-align: center;
+}
+
+.container_header {
+  margin-bottom: 30px;
+}
+
+.organizationForm_row {
+  margin: 0 auto 40px;
+  width: fit-content;
+}
+
+.organizationForm_row label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.organizationForm_row input {
+  min-width: 240px;
+  padding: 8px;
+  border: 1px solid #000;
+  border-radius: 2%;  
+}
+
+.organizationForm_button {
+  margin: 0 auto;
+  cursor: pointer;
+}
+
+.logo {
+  position: absolute;
+  left: 17px;
+  max-width: 50px;
+  line-height: 1;
+  text-align: center;
+  font-weight: 400;
+  font-size: 25px !important;
+  top: 50%;
+  transform: translate(-17px, -50%);
+}
+
+.logo:hover {
+  text-decoration: none !important;
+}
+
+.addPerson_button {
+  height: 100%;
+  background: transparent;
+  padding: 8px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.createOrganizationForm_row {
+  margin-bottom: 20px;
+}
+
+.createOrganizationForm_row label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+input {
+  min-width: 240px;
+  padding: 8px;
+  border: 1px solid #000;
+  border-radius: 2%; 
+}
+
+.organizationForm_container .createOrganizationForm_row:last-of-type {
+  margin-bottom: 40px;
+}
+
+.createOrganization_button {
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.organization_name {
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.members_container h1 {
+  text-align: center;
+}
+
+.membersList_container {
+  width: fit-content;
+  margin: 50px auto;
+  padding: 20px 40px;
+  background: #fff;
+  border-radius: 2%;
+  border: 1px solid #006D77;
+}
+
+.organization_header {
+  display: flex;
+  position: relative;
+  height: 57px;
+  align-items: center;
+  border-bottom: 1px solid #000;
+  padding-bottom: 10px;
+}
+
+.organization_header a {
+  margin: 0 20px;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.createTask_button {
+  background: transparent;
+  color: #006D77;
+  text-decoration: none;
+  padding: 12px 20px;
+  display: block;
+  width: -moz-fit-content;
+  width: fit-content;
+  font-size: 18px;
+  text-transform: uppercase;
+  border: 3px solid #006D77;
+  font-weight: 800;
+  top: 50%;
+  transform: translate(0, -50%);
+  height: 100%;
+  position: absolute;
+  right: 0;
+  cursor: pointer;
+}
+
+.inviteUsers_form label {
+  font-weight: 600;
+  font-size: 19px;
+  margin-right: 20px;
+}
+
+.inviteUsers_form input {
+  padding: 12px;
+  font-size: 18px;
+}
+
+.inviteUsersForm_button {
+  margin: 0 20px;
+  cursor: pointer;
+}
+
+.user_image {
+  display: inline-block;
+  margin-right: 20px;
+  max-width: 40px;
+  height: auto;
+}
+
+.table_row {
+  margin: 30px 0;
+}
+
+.tableRow_content {
+  display: flex;
+}
+
+.table_row h4 {
+  margin: 0;
+}
+
+.urgent_task {
+  display: block;
+  text-align: center;
+  background: #dc2f02;
+  width: fit-content;
+  padding: 3px 8px;
+  border-radius: 10px;
+  margin-left: 50px;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #fff;
+}
+
+.taskPopup_container {
+  
 }

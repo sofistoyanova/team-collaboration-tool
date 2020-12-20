@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { userSignupValidation } from '../helpers/formValidation'
 import { postMethod } from '../helpers/request'
+import backgrounImage from '../assets/signup-background.jpg'
 
 const Signup = () => {
     const [ statusMessage, setStatusMessage ] = useState('')
@@ -36,46 +37,49 @@ const Signup = () => {
         }
     }
     return (
-        <div>
-            <h1>Welcome to my chat app</h1>
+        <div className="signupFormOuter_container">
+            <img className="background_image" src={backgrounImage} />
+            <div className="signupForm_container">
+                <h1>Welcome to the team!</h1>
 
-            <form onSubmit={handleFormSubmit}>
-                <p>{statusMessage}</p>
-                <div>
-                    <label>First name</label>
-                    <input type="text" name="firstName" placeholder="First Name" />
-                </div>
+                <form className="signup_form" onSubmit={handleFormSubmit}>
+                    <div className="form_row">
+                        <label>First name</label>
+                        <input type="text" name="firstName" placeholder="First Name" />
+                    </div>
 
-                <div>
-                    <label>Last name</label>
-                    <input type="text" name="lastName" placeholder="Last Name" />
-                </div>
+                    <div className="form_row">
+                        <label>Last name</label>
+                        <input type="text" name="lastName" placeholder="Last Name" />
+                    </div>
 
-                <div>
-                    <label>Email</label>
-                    <input type="email" name="email" placeholder="a@a.com" />
-                </div>
+                    <div className="form_row">
+                        <label>Email</label>
+                        <input type="email" name="email" placeholder="a@a.com" />
+                    </div>
 
-                <div>
-                    <label>Password </label>
-                    <input type="password" value="1234567" name="password" />
-                </div>
+                    <div className="form_row">
+                        <label>Password </label>
+                        <input type="password" value="1234567" name="password" />
+                    </div>
 
-                <div>
-                    <label>Confirm Password </label>
-                    <input type="password" value="1234567" name="confirmedPassword" />
-                </div>
+                    <div className="form_row">
+                        <label>Confirm Password </label>
+                        <input type="password" value="1234567" name="confirmedPassword" />
+                    </div>
 
-                <div>
-                    <label>Upload profile picture</label>
-                    <input
-                        name="profileImage"
-                        type="file" 
-                    />
-                </div>
+                    <div className="form_row">
+                        <label>Upload profile picture</label>
+                        <input
+                            name="profileImage"
+                            type="file" 
+                        />
+                    </div>
 
-                <input type="submit" />
-            </form>
+                    <p className="errorStatus_message">{statusMessage}</p>
+                    <button className="form_row form_button" type="submit">submit</button>
+                </form>
+            </div>
         </div>
     )
 }

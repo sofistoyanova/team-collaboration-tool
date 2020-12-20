@@ -15,14 +15,18 @@ const JoinOrganization = () => {
     }
 
     return(
-        <div>
-            <h1>Join organization</h1>
-            <p>{requestStatusMsg}</p>
+        <div className="organizationForm_container">
+            <div className="container_header">
+                <h1>Join organization</h1>
+                <p className="errorStatus_message">{requestStatusMsg}</p>
+            </div>
 
             <form onSubmit={handleFormSubmit}>
-                <label> Type organization name: </label>
-                <input required type="text" placeholder="organization name" name="organizationName" />
-                <input type="submit" value="send request" />
+                <div className="organizationForm_row">
+                    <label> Type organization name: </label>
+                    <input required type="text" placeholder="organization name" name="organizationName" />
+                </div>
+                <input className="button organizationForm_button" type="submit" value="send request" />
             </form>
         </div>
     )

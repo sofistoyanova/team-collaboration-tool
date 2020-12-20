@@ -1,9 +1,10 @@
+
 const express = require('express')
 const mongoose = require('mongoose')
 const MongoClient = require('mongodb').MongoClient;
 const keys = require('./config/keys')
 const session = require('cookie-session')
-
+const passport = require('passport')
 
 const PORT = process.env.PORT || 9095
 const app = express()
@@ -15,11 +16,12 @@ mongoose
     .then(() => console.log( 'Database Connected' ))
     .catch(err => console.log( err ));
 
-
 require('./models/User')
 require('./models/Organization')
 require('./models/Notification')
 require('./models/Task')
+require('./models/ForgottenPassword')
+require('./helpers/passport')
 
 app.use(express.json())
 app.use((req, res, next) => {
@@ -39,6 +41,11 @@ app.use(
         keys: [keys.cookieKey]
     })
 ) 
+
+
+
+app.use(passport.initialize())
+app.use(passport.session())
 
 // routes
 const apiRoutes = require('./routes/api')

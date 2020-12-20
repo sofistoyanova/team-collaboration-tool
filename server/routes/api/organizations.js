@@ -242,7 +242,7 @@ router.get('/', async (req, res) => {
         const organization = await Organization.findById(id)
 
         if(organization) {
-            return res.send({status: 200, message: organization.name})
+            return res.send({status: 200, message: organization})
         }
         return res.send({status: 404, message: 'Does not exists'})
     } catch(err) {

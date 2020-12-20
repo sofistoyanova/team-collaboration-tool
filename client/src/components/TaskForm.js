@@ -44,7 +44,8 @@ const TaskForm = (props) => {
     return (
         <div id="task_form" className="hide">
             <div onClick={hideTaskForm} className="taskForm_overlay"></div>
-            <div className="taskForm_container">
+            <div className="taskForm_container taskPopup_container">
+                <span onClick={hideTaskForm} className="btn-close">X</span>
                 <h2>Create form</h2>
                 <p>{errorMsg}</p>
                 <form onSubmit={handleFormSubmit} method="POST" encType="multipart/form-data">

@@ -28,7 +28,7 @@ export const userSignupValidation = (formData) => {
     if(password.length < 7) {
         return status = {
             code: 400,
-            message: 'Password should contains at least 7characters.'
+            message: 'Password should contains at least 7 characters.'
         }
     }
 
@@ -60,7 +60,7 @@ export const userLoginValidation = (formData) => {
     if(!emailPatternMatch) {
         return status = {
             code: 400,
-            message: 'PEmail is invalid format'
+            message: 'Email is invalid format'
         }
     }
 
@@ -68,4 +68,49 @@ export const userLoginValidation = (formData) => {
         code: 200,
         message: ''
     }
+}
+
+export const changePasswordValidation = (formData) => {
+    formData = Object.fromEntries(formData.entries())
+
+    const { oldPassword, newPassword, confirmNewPassword } = formData
+    let status = {
+        code: 200,
+        message: 'success'
+    }
+
+    if(newPassword !== confirmNewPassword) {
+        return status = {
+            code: 400,
+            message: 'Password do not match'
+        }
+    }
+
+    if(newPassword.length < 7) {
+        return status = {
+            code: 400,
+            message: 'Password should contains at least 7 characters.'
+        }
+    }
+
+    return status
+}
+
+export const emailValidation = (formData) => {
+    const { email } = formData
+    const emailPattern = /^\S+@\S+\.\S+$/
+    const emailPatternMatch = email.match(emailPattern)
+    let status = {
+        code: 200,
+        message: 'success'
+    }
+
+    if(!emailPatternMatch) {
+        return status = {
+            code: 400,
+            message: 'email not valid'
+        }
+    }
+
+    return status
 }
