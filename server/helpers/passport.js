@@ -15,7 +15,6 @@ passport.deserializeUser((id, done) => {
     })
 })
 
-// When anyone attempt to authenticate with the string 'google' use me(new GoogleSTrategy - containing little information that connect to the string 'google')
 passport.use(
     new GoogleStrategy(
         {

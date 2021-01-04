@@ -21,7 +21,6 @@ const OrganizationWaitlist = () => {
     const respondToRequest = async (action, userId) => {
         const sendResponse = await postMethod({ action, userId, organizationId }, `/api/organizations/request-respond`)
         
-        // if success remove node
         if(sendResponse.data.status == 200) {
             document.getElementById(userId).remove()
         }
@@ -39,7 +38,6 @@ const OrganizationWaitlist = () => {
                         const { user } = request
                         const userId = user._id
                         const { firstName, lastName, email } = user
-                        console.log(4, request)
 
                         return (
                             <div className="waitlist_row" id={userId}>

@@ -14,5 +14,4 @@ const ForgottenPasswordSchema = new Schema({
     }
 })
 
-// Compile Schema into a model
 mongoose.model('ForgottenPassword', ForgottenPasswordSchema)

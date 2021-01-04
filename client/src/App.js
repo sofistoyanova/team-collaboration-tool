@@ -18,7 +18,6 @@ import { useEffect, useState } from 'react'
 import { getMethod } from './helpers/request'
 
 function App() {
-  //const userId = localStorage.getItem('userId')
   const [ userId, setUserId ] = useState(localStorage.getItem('userId'))
 
   useEffect(async () => {

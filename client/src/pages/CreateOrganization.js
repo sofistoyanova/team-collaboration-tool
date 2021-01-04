@@ -11,7 +11,6 @@ const CreateOrganization = () => {
         const form = event.target
         const formData = Object.fromEntries(new FormData(form).entries())
         formData.emails = emails
-        console.log('k',formData)
         const request = await postMethod(formData, '/api/organizations/')
         const requestResponse = request.data.message
         setStatusMessage(requestResponse)

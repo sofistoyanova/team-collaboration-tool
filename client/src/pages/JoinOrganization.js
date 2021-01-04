@@ -10,7 +10,6 @@ const JoinOrganization = () => {
         const formData = Object.fromEntries(new FormData(form).entries())
 
         const request = await postMethod(formData, '/api/organizations/join')
-        console.log(request.data.message)
         setRequestStatusMsg(request.data.message)
     }
 

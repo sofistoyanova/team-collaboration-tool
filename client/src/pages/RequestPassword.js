@@ -11,15 +11,12 @@ const RequestPassword = (props) => {
         event.preventDefault()
         let formData = new FormData(document.querySelector('#requestNewPassowrd'))
         formData = Object.fromEntries(formData.entries())
-        console.log(formData)
         const formValidationStatus = emailValidation(formData)
-        console.log(formValidationStatus)
         if(formValidationStatus.code == 200) {
             const request = await postMethod(formData, `/api/users/forgot-password`)
             const requestResponseData = request.data
             const requestResponseCode = requestResponseData.code
             const requestResponseMessage = requestResponseData.message
-                console.log('r', requestResponseData)
             setStatusMessage(requestResponseMessage)
         } else {
             setStatusMessage(formValidationStatus.message)

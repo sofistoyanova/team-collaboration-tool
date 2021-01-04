@@ -21,5 +21,4 @@ const notificationSchema = new Schema({
     }
 })
 
-// Compile Schema into a model
 mongoose.model('Notification', notificationSchema)

@@ -16,7 +16,6 @@ export const getMethod = async (route) => {
 
 export const postMethod = async (formData, route) => {
   try {
-    console.log('f', formData)
     const res = await axios.post(route, formData, headers)
     return res
   } catch (err) {

@@ -15,7 +15,7 @@ const TaskForm = (props) => {
         const requestAssignees = await getMethod('/api/organizations/assignees?organizationId=' + props.organizationId)
         const requestAssigneesStatus = requestAssignees.data.status
         const users = requestAssignees.data.message
-        console.log(requestAssignees.data)
+
         if(requestAssigneesStatus == 200) {
             setAssignees(users)
         }
@@ -25,13 +25,12 @@ const TaskForm = (props) => {
         event.preventDefault()
         const form = event.target
         const formData = new FormData(form)
-        const request = await postMethod(formData, '/api/tasks/?organizationId=' + props.organizationId)
+        const request = await postMethod(formData, '/api/organizations/tasks/?organizationId=' + props.organizationId)
         const requestResponse = request.data.message
         
         if(request.data.status == 200 && requestResponse.length > 0) {
             hideTaskForm()
             props.setTasks(requestResponse)
-            //setTasks(requestResponse)
         } else {
             setErrorMsg('Please try again later')
         }

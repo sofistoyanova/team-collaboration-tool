@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-const { patchMethod } = require('../helpers/request')
+const { postMethod } = require('../helpers/request')
 
 const CommentForm = (props) => {
     const [errorMsg, setErrorMsg] = useState('')
@@ -9,13 +9,10 @@ const CommentForm = (props) => {
         const form = event.target
         let formData =  new FormData(form)
         formData = Object.fromEntries(formData.entries())
-        const request = await patchMethod(`/api/tasks/comments?taskId=${props.taskId}`, formData)
-        console.log('request form comment', request)
+        const request = await postMethod(formData, `/api/organizations/tasks/comments?taskId=${props.taskId}&organizationId=${props.organizationId}`)
         const requestResponse = request.data.message
-        console.log(request.data)
+
         if(request.data.status == 200 && requestResponse.length > 0) {
-            //props.setComments(requestResponse)
-            //setTasks(requestResponse)
             props.updateComments(requestResponse)
             props.removeErrorMsg()
             form.reset()

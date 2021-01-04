@@ -52,5 +52,4 @@ const userSchema = new Schema({
     ]
 })
 
-// Compile Schema into a model
 mongoose.model('User', userSchema)

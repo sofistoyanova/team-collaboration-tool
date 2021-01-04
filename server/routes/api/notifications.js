@@ -16,14 +16,11 @@ router.get('/', async (req, res) => {
             const organizationNotifications = await Notification.find({for: role, organization: organizationId})
 
             await Promise.all(organizationNotifications.map(async organizationNotification => {
-                //find user
                 const userId = organizationNotification.user
                 const user = await User.findById(userId)
                 organizationNotification.user = user
                 notifications.push(organizationNotification)
             }))
-
-            //console.log(notifications)
         }
 
         res.send({status: 200, notifications})

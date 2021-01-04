@@ -2,7 +2,6 @@ const express = require('express')
 const mongoose = require('mongoose')
 const multer = require('multer')
 const path = require('path')
-const webPush = require('web-push')
 const nodemailer = require('nodemailer')
 const keys = require('../../config/keys')
 const { gmailEmail, gmailPassword } = keys
@@ -31,17 +30,11 @@ const storage = multer.diskStorage({
         cb(null, '../client/src/uploads')
     },
     filename: function(req, file, cb) {
-        console.log(file.mimetype)
-        const isImage = file.mimetype.includes('image')
-        // if(isImage) {
-        //     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
-        // }
         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
     }
 })
 
 
-// Sign up route
 const upload = multer({
     storage: storage,
     fileFilter: (req, file, cb) => {
@@ -61,13 +54,11 @@ router.patch('/comments', async (req, res) => {
     try {
         const task = await Task.findById(taskId)
         const author = await User.findById(authorId)
-        console.log(author)
         task.comments.push({text: comment, author: author.email})
 
         await task.save()
         return res.send({status: 200, message: task.comments})
     } catch(err) {
-        console.log(err)
         res.status(400).send('server error')
     }
 })
@@ -85,14 +76,13 @@ router.get('/comments', async (req, res) => {
         }
         return res.send({status: 200, message: task.comments})
     } catch(err) {
-        console.log(err)
         res.status(400).send('server error')
     }
 })
 
 router.delete('/comments', async (req, res) => {
     const { commentId, taskId } = req.query
-    console.log(commentId, taskId)
+
     try {
         const task = await Task.findById(taskId)
         const filteredComments = task.comments.filter(comment => comment._id != commentId)
@@ -101,7 +91,6 @@ router.delete('/comments', async (req, res) => {
         await task.save()
         return res.send({status: 200, message: task.comments})
     } catch(err) {
-        console.log(err)
         res.status(400).send('server error')
     }
 })
@@ -121,7 +110,6 @@ router.delete('/', async (req, res) => {
         const allTasks = await Task.find({ organization: organizationId })
         return res.send({status: 200, message: allTasks})
     } catch(err) {
-        console.log(err)
         res.status(400).send('server error')
     }
 })
@@ -171,13 +159,11 @@ router.post('/', upload.single('media'), async (req, res) => {
     const { organizationId } = req.query
     
     try {
-        // create task
         if(!title || !description || !assignee) {
             return res.send({status: 400, message: 'Name, description and assignee are required'})
         }
 
         const assignedUser = await User.findOne({ email })
-        //console.log(assignedUser, email, assignedUser._id)
         const organization = await Organization.findById(organizationId)
 
         const task = await Task({
@@ -206,7 +192,6 @@ router.post('/', upload.single('media'), async (req, res) => {
         }
 
         const allTasks = await Task.find({ organization: organizationId })
-        //console.log(allTasks)
         return res.send({status: 200, message: allTasks})
     } catch(err) {
         return res.send({ status: 500, message: 'server error' })
@@ -217,13 +202,11 @@ router.get('/', async (req, res) => {
     try {
         const { organizationId } = req.query
         const tasks = await Task.find({ organization: organizationId })
-        //console.log('tasks', tasks, organizationId)
         if(tasks.length < 1) {
             return res.send({status: 404, message: 'no tasks'})
         }
         return res.send({status: 200, message: tasks})
     } catch(err) {
-        console.log(err)
         return res.send({ status: 500, message: 'server error' })
     }
 })

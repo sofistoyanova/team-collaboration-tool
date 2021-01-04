@@ -17,7 +17,6 @@ const Login = () => {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault()
-        console.log(5)
         const form = document.querySelector('form')
         let formData = Object.fromEntries(new FormData(form).entries())
         const formValidation = userLoginValidation(formData)
@@ -31,8 +30,6 @@ const Login = () => {
         const requestData = request.data
 
         if(requestData.status == 200) {
-            // redirect to home
-            // set local storage cookie
             setLoginErrorMsg('success')
             const user = request.data.message
             const userId = user._id
@@ -40,12 +37,8 @@ const Login = () => {
             localStorage.setItem('userId', userId)
             history.push('/home')
         } else {
-            console.log(1)
-            // redirect
-            // establish cookie/local storage
             setLoginErrorMsg(requestData.message)
         }
-        
     }
 
     return (
@@ -64,7 +57,7 @@ const Login = () => {
 
                     <div className="form_row">
                         <label>Password: </label>
-                        <input type="password" value="1234567" name="password" />
+                        <input type="password" name="password" />
                     </div>
                     
                     <p className="errorStatus_message">{loginErrorMsg}</p>  

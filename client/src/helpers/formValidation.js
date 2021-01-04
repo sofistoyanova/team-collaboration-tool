@@ -1,13 +1,8 @@
 export const userSignupValidation = (formData) => {
-    // validate length
-    // validate email
-    // validate password if match and lengh, if contains at least one letter
-    // return messgae
     formData = Object.fromEntries(formData.entries())
 
     let status = {}
     const { firstName, lastName, email, password, confirmedPassword } = formData
-    console.log('validation', formData)
     const emailPattern = /^\S+@\S+\.\S+$/
     const emailPatternMatch = email.match(emailPattern)
 

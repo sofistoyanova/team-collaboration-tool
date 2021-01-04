@@ -8,20 +8,14 @@ const Comments = (props) => {
 
     useEffect(async () => {
         if(comments.length < 1) {
-            console.log('update', props.taskId)
             getComments()
         } 
-        console.log(comments)
     })
 
     const getComments = async () => {
         try{
-            const commentsRequest = await getMethod(`/api/tasks/comments?taskId=${props.taskId}`)
+            const commentsRequest = await getMethod(`/api/organizations/tasks/comments?taskId=${props.taskId}&organizationId=${props.organizationId}`)
             if(commentsRequest.data.status == 200) {
-                //set comments
-                //const comments = commentsRequest.data.message
-
-
                 if(comments.length < 1) {
                     setComments(commentsRequest.data.message)
                 }
@@ -29,18 +23,14 @@ const Comments = (props) => {
                 setErrorMsg(commentsRequest.data.message)
             }
         } catch(err) {
-            console.log(err)
             setErrorMsg('Error, try again later')
         }
     }
 
     const deleteComment = async (commentId) => {
         try {
-            const deleteCommentRequest = await deleteMethod(`/api/tasks/comments?taskId=${props.taskId}&commentId=${commentId}`)
+            const deleteCommentRequest = await deleteMethod(`/api/organizations/tasks/comments?taskId=${props.taskId}&commentId=${commentId}&organizationId=${props.organizationId}`)
             if(deleteCommentRequest.data.status == 200) {
-                //set comments
-                //const comments = deleteCommentRequest.data.message
-
                 setComments(deleteCommentRequest.data.message)
 
             } else {
@@ -54,7 +44,7 @@ const Comments = (props) => {
     return (
         <div className="comments_container">
             <h3>Comments</h3>
-            <CommentForm taskId={props.taskId} updateComments={(comments) => setComments(comments)} removeErrorMsg={() => setErrorMsg('')} />
+            <CommentForm organizationId={props.organizationId} taskId={props.taskId} updateComments={(comments) => setComments(comments)} removeErrorMsg={() => setErrorMsg('')} />
 
             <div>
                 <p>{errorMsg}</p>

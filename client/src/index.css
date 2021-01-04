@@ -92,7 +92,7 @@ a.button:hover {
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 50px;
-  max-height: 60vh;
+  height: auto;
   width: auto;
   overflow: scroll;
 }
@@ -150,7 +150,6 @@ a:hover {
 }
 
 .container {
-  position: relative;
   max-width: 1400px;
   margin: 0 auto;
   padding: 50px 50px 100px;

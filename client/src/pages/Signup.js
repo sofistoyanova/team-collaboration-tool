@@ -19,13 +19,7 @@ const Signup = () => {
         let formData = new FormData(form)
         const formValidationStatus = userSignupValidation(formData)
 
-        console.log('form', formValidationStatus)
-
-        //file
-        console.log(file)
-
         if(formValidationStatus.code == '200') {
-            // send to DB
             const request = await postMethod(formData, '/api/users/signup')
             const requestResponseData = request.data
             const requestResponseCode = requestResponseData.code
@@ -60,12 +54,12 @@ const Signup = () => {
 
                     <div className="form_row">
                         <label>Password </label>
-                        <input type="password" value="1234567" name="password" />
+                        <input type="password" name="password" />
                     </div>
 
                     <div className="form_row">
                         <label>Confirm Password </label>
-                        <input type="password" value="1234567" name="confirmedPassword" />
+                        <input type="password" name="confirmedPassword" />
                     </div>
 
                     <div className="form_row">

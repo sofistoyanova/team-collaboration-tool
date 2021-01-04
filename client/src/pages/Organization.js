@@ -33,21 +33,17 @@ const Organization = (props) => {
     }
 
     const updateTasks = (tasks) => {
-        console.log('all task', tasks)
         setTasks(tasks)
     }
 
     useEffect(async () => {
-        console.log('tasks updated')
         
         if(!userId) {
             setUserId(localStorage.getItem('userId'))
         }
 
         try {
-            console.log('set name')
             const request = await getMethod(`/api/organizations/?id=${organizationId}`)
-            console.log('orga', request.data)
             setOrganizationName(request.data.message.name)
             setOrganizationAdmin(request.data.message.admin)
         } catch(err) {
@@ -64,19 +60,12 @@ const Organization = (props) => {
     }
 
     const getTasks = async () => {
-        const requestTasks = await getMethod('/api/tasks/?organizationId=' + organizationId)
-        //console.log('request', requestTasks)
+        const requestTasks = await getMethod('/api/organizations/tasks/?organizationId=' + organizationId)
+
         if(requestTasks.data.status == 200) {
-            //setTasks(requestTasks.data.message)
-            console.log('set initial tasks', requestTasks.data.message)
             setTasks(requestTasks.data.message)
-            console.log('should task set', tasks)
         }
     }
-
-    // const requestTasks = (tasks) => {
-
-    // }
     
     return (
         <div className="container">
@@ -97,7 +86,7 @@ const Organization = (props) => {
             </div>
 
             <TasksTable userId={props.userId} updateTasks={(tasks) => updateTasks(tasks)} tasks={tasks} />
-            <TaskForm organizationId={organizationId} setTasks={(tasks) => setTasks(tasks)} />
+            <TaskForm organizationId={organizationId} setTasks={(tasks) => {console.log(tasks); return(setTasks(tasks))}} />
 
             {userId == organizationAdmin ? 
                 <form className="inviteUsers_form" onSubmit={handleFormSubmit}>

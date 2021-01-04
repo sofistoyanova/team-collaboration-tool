@@ -14,7 +14,6 @@ const UserSettings = (props) => {
         if(formValidationStatus.code == 200) {
             const request = await patchMethod(`/api/users/?id=${props.userId}`, Object.fromEntries(formData.entries()))
             const requestResponseData = request.data
-            console.log('re', request)
             const requestResponseCode = requestResponseData.code
             const requestResponseMessage = requestResponseData.message
             

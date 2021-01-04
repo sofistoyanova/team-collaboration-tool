@@ -1,8 +1,6 @@
 const { NavLink } = require("react-router-dom")
 
 const Navbar = (props) => {
-    // if local storage user exists render profile : signup
-    console.log(props.userId)
     return (
         <div>
             {props.userId ?

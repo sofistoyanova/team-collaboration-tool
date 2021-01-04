@@ -17,13 +17,13 @@ const TaskSchema = new Schema({
     title: {
         type: String,
         required: true,
-        minlength: 2,
+        minlength: 1,
         trim: true
     },
     description: {
         type: String,
         required: true,
-        minlength: 2,
+        minlength: 1,
         trim: true
     },
     creator: {
@@ -61,5 +61,4 @@ const TaskSchema = new Schema({
     comments: [commentSchema]
 })
 
-// Compile Schema into a model
 mongoose.model('Task', TaskSchema)

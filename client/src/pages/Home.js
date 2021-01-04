@@ -22,7 +22,7 @@ const Home = (props) => {
 
     const deleteOrganization = async (organizationId) => {
         const deleteOrganizationRequest = await deleteMethod(`/api/organizations/?id=${organizationId}`)
-        console.log(deleteOrganizationRequest.data)
+
         if(deleteOrganizationRequest.data.status == 200) {
             document.getElementById('organization_' + organizationId).remove()
             setErrorMessage(deleteOrganizationRequest.data.message)
@@ -41,9 +41,6 @@ const Home = (props) => {
             <div className="homePage_header">
                 <h1>ORGANIZATIONS</h1>
                 <Button nodeClass="join_button" link='/join-organization' text='+ Join organization' />
-
-                {/* <a className="button join_button" href="/join-organization">+ Join organization</a> */}
-
             </div>
             <p>{ errorMessage }</p>
 
@@ -51,7 +48,6 @@ const Home = (props) => {
                 {
                     invitations.length > 0 ?
                     invitations.map(organization => {
-                        console.log(organization, invitations)
                         const organizationName = organization.name
                         const organizationId= organization._id
                         const organizationAdmin = organization.admin
@@ -65,8 +61,6 @@ const Home = (props) => {
                                     <p>Your role is - <span className="user_role">{userRole}</span></p>
                                     { userRole == 'admin' ? <button className="button deleteOrganization_button" onClick={() => deleteOrganization(organizationId)}>delete</button> : '' }
                                 </NavLink>
-                                {/* <NavLink to={organizationPath}>{organizationName} , role: {userRole}</NavLink> */}
-                                {/* { userRole == 'admin' ? <button onClick={() => deleteOrganization(organizationId)}>delete</button> : '' } */}
                             </div>
                         )
                     })

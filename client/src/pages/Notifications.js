@@ -32,7 +32,6 @@ const Notifications = () => {
             document.querySelector(`#invitation_${organizationId}`).remove()
         }
     }
-    console.log(invitations)
     return (
         <div className="container">
             <h1 className="waitlist_title">Your Notifications:</h1>

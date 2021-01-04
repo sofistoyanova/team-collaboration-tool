@@ -34,11 +34,6 @@ const storage = multer.diskStorage({
         cb(null, '../client/src/uploads')
     },
     filename: function(req, file, cb) {
-        console.log(file.mimetype)
-        const isImage = file.mimetype.includes('image')
-        // if(isImage) {
-        //     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
-        // }
         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
     }
 })
@@ -52,7 +47,6 @@ router.get('/auth/google/callback', passport.authenticate('google'), (req, res) 
     res.redirect('http://localhost:3000/')
 })
 
-// Sign up route
 const upload = multer({
     storage: storage,
     fileFilter: (req, file, cb) => {
@@ -94,7 +88,6 @@ router.patch('/reset-password', async (req, res) => {
         await user.save()
         return res.send({status: 200, message: 'Changed! Go to login!'})
     } catch (err) {
-        console.log(err)
         return res.send({status: 500, message: 'server error'})
     }
 })
@@ -114,7 +107,6 @@ router.post('/forgot-password', async (req, res) => {
         const token = jwt.sign({email}, 'forgottenpassword')
         const url = `localhost:3000/forgot-password?email=${email}&token=${token}`
         const previousForgottenPasswordRecord = await ForgottenPassword.findOne({email: email})
-        console.log('console.', email, token)
 
         if(previousForgottenPasswordRecord) {
             await ForgottenPassword.findByIdAndDelete(previousForgottenPasswordRecord._id)
@@ -132,19 +124,16 @@ router.post('/forgot-password', async (req, res) => {
             if(!err) {
                 return res.send({status: 200, message: 'check your email'})
             } else { 
-                console.log(err)
                 return res.send({status: 500, message: 'there was an error please try again later'})
             }
         })
 
     } catch(err) {
-        console.log(err)
         return res.send({status: 500, message: 'server error'})
     }
 })
 
 router.patch('/', async (req, res) => {
-    console.log('here', req.body)
     const userId = req.query.id
     const { oldPassword, newPassword, confirmNewPassword } = req.body
 
@@ -166,7 +155,7 @@ router.patch('/', async (req, res) => {
         const userPassword = user.password
         const doPasswordsMatch = await bcrypt.compare(oldPassword, userPassword)
         const doOldAndNewPasswordsMatch = await bcrypt.compare(newPassword, userPassword)
-        console.log('oldand new', doOldAndNewPasswordsMatch)
+
         if(!doPasswordsMatch) {
             return res.send({status: 400, message: 'Old password do not match'})
         }
@@ -181,14 +170,13 @@ router.patch('/', async (req, res) => {
 
         return res.send({status: 200, message: 'Successfully updated'})
     } catch(err) {
-        console.log(err)
         return res.send({status: 500, message: 'server error'})
     }
 })
 
 router.get('/user', async (req, res) => {
     const userId = req.query.id
-    //console.log('id', userId)
+
     try {
         const user = await User.findById(userId)
         if(!user) {
@@ -197,15 +185,12 @@ router.get('/user', async (req, res) => {
 
         return res.send({status: 200, message: user})
     } catch(err) {
-        //console.log(err)
         res.send({status: 500, message: 'server error'})
     }
 })
 
 router.post('/signup', upload.single('profileImage'), async (req, res) => {
-    console.log(1, req.body, req.file)
     const fileName = req.file ? req.file.filename : 'default.png'
-    console.log('file', fileName)
     const { firstName, lastName, email, password, confirmedPassword } = req.body
 
     if (!email || !password || !confirmedPassword || !firstName || !lastName) {
@@ -234,16 +219,13 @@ router.post('/signup', upload.single('profileImage'), async (req, res) => {
         return res.send({ status: 400, message: 'Email is not in valid format' })
     } else {
         try {
-        // Hash password
-        const hashedPassword = await bcrypt.hash(password, keys.saltedRounds)
-    
-        // Check if email exists
+        const hashedPassword = await bcrypt.hash(password, keys.saltedRounds)    
         const existingEmail = await User.findOne({ email })
+
         if(existingEmail) {
             return res.send({status: 400, message: 'Email already exists'})
         }
     
-        // Save user
         const user = User({
             firstName,
             lastName,
@@ -256,13 +238,11 @@ router.post('/signup', upload.single('profileImage'), async (req, res) => {
     
         return res.send({ status: 200, message: 'Registered! please go to login' })
         } catch(err) {
-            console.log(err)
             return res.send({ status: 400, message: err.message })
         }
     }
 })
 
-//login 
 router.post("/login", async (req, res) => {
     const { email, password } = req.body
     if(!email || !password) {
@@ -285,7 +265,6 @@ router.post("/login", async (req, res) => {
   
   
       req.session.user = user
-      console.log(req.session.user)
       return res.send({status: 200, message: user})
   
     } catch(err) {
@@ -294,22 +273,15 @@ router.post("/login", async (req, res) => {
   
 })
 
-// get current user
 router.get('/current-user', (req, res) => {
     return res.send(req.session.user)
 })
 
-// logout
 router.get('/logout', (req, res) => {
     req.session = null
     res.redirect('/login')
 })
 
-
-// get notifications
-
-//change to notifications
-// find all notification models associated with the user
 router.get('/invitations', async (req, res) => {
     try {
         const sessionUserId = req.session.user._id
@@ -323,14 +295,13 @@ router.get('/invitations', async (req, res) => {
                 organizations.push(organization)
             }
         }))
-        console.log('all', organizations)
+
         res.send({ status: 200, message: organizations })
     } catch(err) {
         res.send({ status: 500, message: 'Server error pls try again later!' })
     }
 })
 
-// accept or decline invitatio
 router.post('/invitations', async (req, res) => {
     try {
         const { organizationId, action } = req.body
@@ -363,7 +334,7 @@ router.get('/my-organizations', async (req, res) => {
             const organization = await Organization.findById(organizationId)
             organizations.push(organization)
         }))
-        console.log(organizations)
+
         res.send({ status: 200, message: organizations })
     } catch(err) {
         res.send({status: 500, message: 'server error'})

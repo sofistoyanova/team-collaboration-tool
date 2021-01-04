@@ -18,7 +18,6 @@ const ResetPassword = (props) => {
             formData = Object.fromEntries(formData.entries()) 
             const request = await patchMethod(`/api/users/reset-password?email=${email}&token=${token}`, formData)
             const requestResponseData = request.data
-            console.log('req', request)
             const requestResponseCode = requestResponseData.code
             const requestResponseMessage = requestResponseData.message
             

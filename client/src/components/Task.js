@@ -57,9 +57,7 @@ const Task = (props) => {
 
     const changeStaus = async (event) => {
         const statusValue = event.target.value
-        // update ticket
-        let updateTaskRequest = await patchMethod(`/api/tasks/?taskId=${taskId}&organizationId=${organizationId}`, {status: statusValue})
-        // get new tickets array
+        let updateTaskRequest = await patchMethod(`/api/organizations/tasks/?taskId=${taskId}&organizationId=${organizationId}`, {status: statusValue})
         updateTaskRequest = updateTaskRequest.data
 
         if(updateTaskRequest.status != 200) {
@@ -76,7 +74,7 @@ const Task = (props) => {
     }
 
     const deleteTask = async () => {
-        const deleteTaskRequest = await deleteMethod(`/api/tasks/?taskId=${taskId}&organizationId=${organizationId}`)
+        const deleteTaskRequest = await deleteMethod(`/api/organizations/tasks/?taskId=${taskId}&organizationId=${organizationId}`)
 
         if(deleteTaskRequest.data.status == 200) {
             return props.updateTasks(deleteTaskRequest.data.message)
@@ -142,8 +140,13 @@ const Task = (props) => {
                         <span>{assignedUserName}</span>
                     </div>
 
+                    <div className="taskContainer_row">
+                        <span>Deadline: </span>
+                        <span>{new Date(props.deadline).toDateString()}</span>
+                    </div>
+
                     <div>
-                        <Comments taskId={taskId} />
+                        <Comments organizationId={organizationId} taskId={taskId} />
                     </div>
 
                     {props.userId == props.creatorId ? 
